@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MediatR;
+using CQRSSplitWise.DAL.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CQRSSplitWise
 {
@@ -26,6 +28,11 @@ namespace CQRSSplitWise
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDbContext<SplitWiseSQLContext>(x =>
+			{
+				x.UseSqlServer(Configuration["connectionStrings:SplitWiseSQLContext"]);
+			});
+
 			services.AddControllers();
 			services.AddMediatR(typeof(Startup));
 		}
