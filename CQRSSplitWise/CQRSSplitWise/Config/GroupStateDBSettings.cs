@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Config
 {
-	public abstract class NoSQLDBSettings
+	public class GroupStateDBSettings:NoSQLDBSettings
 	{
-		public string ConnectionString { get; set; }
-		public string DatabaseName { get; set; }
+		public string GroupStateCollectionName { get; set; }
 	}
 }

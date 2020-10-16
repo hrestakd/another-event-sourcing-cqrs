@@ -36,16 +36,21 @@ namespace CQRSSplitWise
 				x.UseSqlServer(Configuration["connectionStrings:SplitWiseSQLContext"]);
 			});
 
-			services.Configure<NoSQLDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
+			// Configure different collection configuration settings
+			services.Configure<UserHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
+			services.Configure<GroupStateDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
+			services.Configure<GroupHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
+			services.Configure<WalletStateDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
 
-			services.AddSingleton(x => x.GetRequiredService<IOptions<NoSQLDBSettings>>().Value);
+			services.AddSingleton(x => x.GetRequiredService<IOptions<UserHistoryDBSettings>>().Value);
+			services.AddSingleton(x => x.GetRequiredService<IOptions<GroupStateDBSettings>>().Value);
+			services.AddSingleton(x => x.GetRequiredService<IOptions<GroupHistoryDBSettings>>().Value);
+			services.AddSingleton(x => x.GetRequiredService<IOptions<WalletStateDBSettings>>().Value);
 
 			services.AddTransient<GroupStateQueryRepository>();
 			services.AddTransient<GroupHistoryQueryRepository>();
 			services.AddTransient<UserHistoryQueryRepository>();
 			services.AddTransient<WalletStateQueryRepository>();
-
-			//services.AddTransient<TestService>();
 
 			services.AddControllers();
 			services.AddMediatR(typeof(Startup));
