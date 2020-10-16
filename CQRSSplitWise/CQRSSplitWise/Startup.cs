@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using CQRSSplitWise.Config;
 using Microsoft.Extensions.Options;
 using CQRSSplitWise.DAL.Read;
+using CQRSSplitWise.Services.Read;
+using CQRSSplitWise.DAL.Read.Models;
 
 namespace CQRSSplitWise
 {
@@ -47,10 +49,13 @@ namespace CQRSSplitWise
 			services.AddSingleton(x => x.GetRequiredService<IOptions<GroupHistoryDBSettings>>().Value);
 			services.AddSingleton(x => x.GetRequiredService<IOptions<WalletStateDBSettings>>().Value);
 
-			services.AddTransient<GroupStateQueryRepository>();
-			services.AddTransient<GroupHistoryQueryRepository>();
-			services.AddTransient<UserHistoryQueryRepository>();
-			services.AddTransient<WalletStateQueryRepository>();
+			services.AddScoped<IQueryRepository<GroupState>, GroupStateQueryRepository>();
+			services.AddScoped<IQueryRepository<GroupHistory>, GroupHistoryQueryRepository>();
+			services.AddScoped<IQueryRepository<UserHistory>, UserHistoryQueryRepository>();
+			services.AddScoped<IQueryRepository<WalletState>, WalletStateQueryRepository>();
+
+			services.AddScoped<UserHistoryService>();
+			services.AddScoped<GroupHistoryService>();
 
 			services.AddControllers();
 			services.AddMediatR(typeof(Startup));
