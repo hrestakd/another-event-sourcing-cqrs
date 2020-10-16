@@ -1,10 +1,13 @@
-﻿using CQRSSplitWise.Config;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using CQRSSplitWise.Config;
 using CQRSSplitWise.DAL.Read.Models;
 using MongoDB.Driver;
 
 namespace CQRSSplitWise.DAL.Read
 {
-	public class UserHistoryQueryRepository : IQueryRepository
+	public class UserHistoryQueryRepository : IQueryRepository<UserHistory>
 	{
 		private readonly IMongoCollection<UserHistory> _userHistory;
 
@@ -14,6 +17,13 @@ namespace CQRSSplitWise.DAL.Read
 			var db = client.GetDatabase(config.DatabaseName);
 
 			_userHistory = db.GetCollection<UserHistory>(config.UserHistoryCollectionName);
+		}
+
+		public IEnumerable<UserHistory> GetData(Expression<Func<UserHistory, bool>> filterExpression)
+		{
+			var history = _userHistory.Find(filterExpression).ToEnumerable();
+
+			return history;
 		}
 	}
 }

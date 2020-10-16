@@ -6,9 +6,10 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace CQRSSplitWise.DAL.Read.Models
 {
-	public class GroupHistory : ReadModelBase
+	public abstract class ReadModelBase
 	{
-		public GroupData GroupData { get; set; }
-		public IEnumerable<Transaction> Transactions { get; set; }
+		[BsonId]
+		[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+		public string ObjectID { get; set; }
 	}
 }
