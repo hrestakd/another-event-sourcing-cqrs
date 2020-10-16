@@ -50,8 +50,7 @@ namespace CQRSSplitWise.Domain.Handlers
 			{
 				groupUsersDto.Add(new GroupUsers
 				{
-					GroupId = groupUser.GroupId,
-					UserId = groupUser.UserId
+					GroupId = groupUser.GroupId
 				});
 			}
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoMapper.Internal;
 using CQRSSplitWise.DAL.Read;
 using CQRSSplitWise.DAL.Read.Models;
+using CQRSSplitWise.DTO.Read;
 using CQRSSplitWise.Filters.Read;
 
 namespace CQRSSplitWise.Services.Read
@@ -22,88 +23,98 @@ namespace CQRSSplitWise.Services.Read
 			_repository = repository;
 		}
 
-		public IEnumerable<TransactionHistory> GetUserHistory(UserHistoryFilter filter)
+		public IEnumerable<UserHistoryDTO> GetUserHistory(UserHistoryFilter filter)
 		{
+			var expressions = GenerateExpressions(filter);
+
+			IEnumerable<TransactionHistory> transactionData;
+
+			if (expressions == null || expressions.Count == 0)
+			{
+				transactionData = _repository.GetData(null);
+			}
+			else
+			{
+				transactionData = _repository.GetData(expressions);
+			}
+
+			var data = MapToUserHistory(transactionData);
+
+			return data;
+		}
+
+		IEnumerable<UserHistoryDTO> MapToUserHistory(IEnumerable<TransactionHistory> transactionHistory)
+		{
+			var userHistory = transactionHistory
+				.Select(x => new UserHistoryDTO
+				{
+					Name = x.UserData.Name,
+					LastName = x.UserData.LastName,
+					Amount = x.TransactionData.Amount,
+					Description = x.TransactionData.Description,
+					DestWalletName = x.TransactionData.DestWalletName,
+					SourceWalletName = x.TransactionData.SourceWalletName,
+					TransactionDate = x.TransactionData.TransactionDate,
+					TransactionType = x.TransactionData.TransactionType
+				})
+				.AsEnumerable();
+
+			return userHistory;
+		}
+
+		private List<Expression<Func<TransactionHistory, bool>>> GenerateExpressions(UserHistoryFilter filter)
+		{
+			var expressions = new List<Expression<Func<TransactionHistory, bool>>>
+			{
+				x => true
+			};
 
 			if (filter == null)
 			{
-				return _repository.GetData(x => true);
+				return expressions;
 			}
 
-			return _repository.GetData(x => true);
+			if (filter.UserID > 0)
+			{
+				expressions.Add(x => x.UserData.UserID == filter.UserID);
+			}
 
-			//var results = _repository.GetData(x =>
-			//	(filter.UserID > 0 ? x.UserData.UserID == filter.UserID : true)
-			//		&&
-			//	(!string.IsNullOrWhiteSpace(filter.UserName) ? x.UserData.Name.Contains(filter.UserName, StringComparison.InvariantCultureIgnoreCase) : true)
-			//		&&
-			//	(!string.IsNullOrWhiteSpace(filter.UserLastName) ? x.UserData.LastName.Contains(filter.UserLastName, StringComparison.InvariantCultureIgnoreCase) : true)
-			//		&&
-			//	(x.Transactions.Any(y => 
-			//		(filter.CreatedFrom.HasValue ? y.);
-			//if (filter.UserID > 0)
-			//{
-			//	expressions.Add(x => x.UserData.UserID == filter.UserID);
-			//}
+			if (!string.IsNullOrWhiteSpace(filter.UserName))
+			{
+				expressions.Add(x => x.UserData.Name.Contains(filter.UserName, StringComparison.InvariantCultureIgnoreCase));
+			}
 
-			//if (!string.IsNullOrWhiteSpace(filter.UserName))
-			//{
-			//	expressions.Add(x => x.UserData.Name.Contains(filter.UserName, StringComparison.InvariantCultureIgnoreCase));
-			//}
+			if (!string.IsNullOrWhiteSpace(filter.UserLastName))
+			{
+				expressions.Add(x => x.UserData.LastName.Contains(filter.UserLastName, StringComparison.InvariantCultureIgnoreCase));
+			}
 
-			//if (!string.IsNullOrWhiteSpace(filter.UserLastName))
-			//{
-			//	expressions.Add(x => x.UserData.LastName.Contains(filter.UserLastName, StringComparison.InvariantCultureIgnoreCase));
-			//}
+			if (filter.AmountFrom > 0)
+			{
+				expressions.Add(x => x.TransactionData.Amount >= filter.AmountFrom);
+			}
 
-			//Expression finalUserExpression = expressions.First();
-			//foreach (var exp in expressions)
-			//{
-			//	finalUserExpression = Expression.Add(finalUserExpression, exp);
-			//}
+			if (filter.AmountTo > 0)
+			{
+				expressions.Add(x => x.TransactionData.Amount < filter.AmountTo);
+			}
 
-			//Expression<Func<Transaction, bool>> transactionBaseExpression = x => true;
-			//var transactionExpressions = new List<Expression<Func<Transaction, bool>>>();
-			//transactionExpressions.Add(transactionBaseExpression);
+			if (filter.CreatedFrom.HasValue)
+			{
+				expressions.Add(x => x.TransactionData.TransactionDate >= filter.CreatedFrom.Value);
+			}
 
-			//if (filter.AmountRangeFilterSet)
-			//{
-			//	transactionExpressions.Add(x =>
-			//		filter.AmountFrom.HasValue ? x.Amount >= filter.AmountFrom : true
-			//			&&
-			//		filter.AmountTo.HasValue ? x.Amount < filter.AmountTo : true
-			//	);
-			//}
+			if (filter.CreatedTo.HasValue)
+			{
+				expressions.Add(x => x.TransactionData.TransactionDate < filter.CreatedTo.Value);
+			}
 
-			//if (filter.DateRangeFilterSet)
-			//{
-			//	transactionExpressions.Add(x =>
-			//		filter.CreatedFrom.HasValue ? x.TransactionDate >= filter.CreatedFrom : true
-			//			&&
-			//		filter.CreatedTo.HasValue ? x.TransactionDate < filter.CreatedTo : true
-			//	);
-			//}
+			if (filter.TransactionType > 0)
+			{
+				expressions.Add(x => x.TransactionData.TransactionType == filter.TransactionType);
+			}
 
-			//Expression<Func<Transaction, bool>> compiledTransactionExpression = x => true;
-			//Expression<Func<Transaction, bool>> finalTransactionExpression = transactionExpressions.First();
-			//foreach (var exp in transactionExpressions.Skip(1))
-			//{
-			//	//finalTransactionExpression = Expression.And(finalTransactionExpression, exp);
-			//	var func = finalTransactionExpression.Compile();
-			//	var func2 = exp.Compile();
-			//	func.
-			//}
-
-			//finalTransactionExpression.
-
-			//Expression<Func<UserHistory, bool>> userTransactionFilter = x => x.Transactions.Any( finalTransactionExpression);
-			//Expression.And()
-
-			//var userFunc = finalUserExpression.GetChain().Where((UserHistory)x => x.;
-			//finalUserExpression = Expression.MakeMemberAccess(finalTransactionExpression, new MemberInfo);
-			//finalUserExpression.
-
-			//_repository.GetData(baseExpression);
+			return expressions;
 		}
 	}
 }

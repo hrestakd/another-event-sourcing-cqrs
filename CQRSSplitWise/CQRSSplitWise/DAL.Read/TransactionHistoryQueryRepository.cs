@@ -5,25 +5,39 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CQRSSplitWise.Config;
 using CQRSSplitWise.DAL.Read.Models;
+using Microsoft.Extensions.Logging.Abstractions;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace CQRSSplitWise.DAL.Read
 {
 	public class TransactionHistoryQueryRepository : IQueryRepository<TransactionHistory>
 	{
-		private readonly IMongoCollection<TransactionHistory> _groupHistory;
+		private readonly IMongoCollection<TransactionHistory> _transactionHistory;
 
 		public TransactionHistoryQueryRepository(TransactionHistoryDBSettings config)
 		{
 			var client = new MongoClient(config.ConnectionString);
 			var db = client.GetDatabase(config.DatabaseName);
 
-			_groupHistory = db.GetCollection<TransactionHistory>(config.TransactionHistoryCollectionName);
+			_transactionHistory = db.GetCollection<TransactionHistory>(config.TransactionHistoryCollectionName);
 		}
 
-		public IEnumerable<TransactionHistory> GetData(Expression<Func<TransactionHistory, bool>> filterExpression)
+		public IEnumerable<TransactionHistory> GetData(List<Expression<Func<TransactionHistory, bool>>> filterExpressions)
 		{
-			var history = _groupHistory.Find(filterExpression).ToEnumerable();
+			var transactionsExpression = _transactionHistory.AsQueryable();
+
+			if (filterExpressions == null || filterExpressions.Count == 0)
+			{
+				return transactionsExpression.AsEnumerable();
+			}
+
+			foreach (var exp in filterExpressions)
+			{
+				transactionsExpression = transactionsExpression.Where(exp);
+			}
+
+			var history = transactionsExpression.AsEnumerable();
 
 			return history;
 		}

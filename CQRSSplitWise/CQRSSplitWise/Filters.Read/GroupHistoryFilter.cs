@@ -11,10 +11,10 @@ namespace CQRSSplitWise.Filters.Read
 	{
 		public int GroupID { get; set; }
 		public string GroupName { get; set; }
-		public DateTime CreatedFrom { get; set; }
-		public DateTime CreatedTo { get; set; }
-		public decimal AmountFrom { get; set; }
-		public decimal AmountTo { get; set; }
+		public DateTime? CreatedFrom { get; set; }
+		public DateTime? CreatedTo { get; set; }
+		public decimal? AmountFrom { get; set; }
+		public decimal? AmountTo { get; set; }
 		public TransactionType TransactionType { get; set; }
 	}
 }

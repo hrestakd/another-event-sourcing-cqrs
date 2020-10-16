@@ -2,8 +2,9 @@
 {
 	public enum TransactionType
 	{
-		None,
-		Payment,
-		Refund
+		Default = 0,
+		None = 1,
+		Payment = 2,
+		Refund = 3
 	}
 }
