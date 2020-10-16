@@ -56,6 +56,9 @@ namespace CQRSSplitWise.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -69,6 +72,9 @@ namespace CQRSSplitWise.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("TransactionId");

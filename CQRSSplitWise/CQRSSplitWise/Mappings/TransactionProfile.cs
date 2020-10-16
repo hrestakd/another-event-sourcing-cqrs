@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+
+namespace CQRSSplitWise.Mappings
+{
+	public class TransactionProfile : Profile
+	{
+		public TransactionProfile()
+		{
+			// map DAL to DTO
+			CreateMap<DAL.Models.Transaction, Models.Dto.Transaction>();
+			// map RQ to command
+			CreateMap<Models.BindingModel.InsertTransaction, Domain.Commands.InsertTransactionCmd>();
+			// map command to DAL
+			CreateMap<Domain.Commands.InsertTransactionCmd, DAL.Models.Transaction>()
+				.ForMember(x => x.TransactionId, x => x.Ignore())
+				.ForMember(x => x.DateCreated, x => x.Ignore())
+				.ForMember(x => x.DestinationWallet, x => x.Ignore())
+				.ForMember(x => x.SourceWallet, x => x.Ignore());
+		}
+	}
+}

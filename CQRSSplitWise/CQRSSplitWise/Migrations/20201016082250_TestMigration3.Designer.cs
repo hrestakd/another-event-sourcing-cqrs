@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CQRSSplitWise.Migrations
 {
     [DbContext(typeof(SplitWiseSQLContext))]
-    [Migration("20201015163319_TestMigration")]
-    partial class TestMigration
+    [Migration("20201016082250_TestMigration3")]
+    partial class TestMigration3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,6 +58,9 @@ namespace CQRSSplitWise.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -71,6 +74,9 @@ namespace CQRSSplitWise.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("TransactionId");

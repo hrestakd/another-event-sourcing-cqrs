@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CQRSSplitWise.Migrations
 {
-    public partial class TestMigration : Migration
+    public partial class TestMigration3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -84,11 +84,13 @@ namespace CQRSSplitWise.Migrations
                 {
                     TransactionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
                     SourceWalletId = table.Column<int>(nullable: true),
                     DestinationWalletId = table.Column<int>(nullable: false),
                     TransactionType = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
+                    Description = table.Column<string>(nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {

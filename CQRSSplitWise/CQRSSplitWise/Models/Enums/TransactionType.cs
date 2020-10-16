@@ -1,4 +1,4 @@
-﻿namespace CQRSSplitWise.DAL.Models
+﻿namespace CQRSSplitWise.Models.Enums
 {
 	public enum TransactionType
 	{

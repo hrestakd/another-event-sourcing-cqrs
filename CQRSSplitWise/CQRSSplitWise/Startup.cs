@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using CQRSSplitWise.Config;
 using Microsoft.Extensions.Options;
 using CQRSSplitWise.DAL.Read;
+using AutoMapper;
 
 namespace CQRSSplitWise
 {
@@ -48,6 +49,10 @@ namespace CQRSSplitWise
 			//services.AddTransient<TestService>();
 
 			services.AddControllers();
+			services.AddAutoMapper(typeof(Startup));
+			var configuration = new MapperConfiguration(cfg => cfg.AddMaps(new[] { typeof(Startup) }));
+			configuration.CompileMappings();
+			configuration.AssertConfigurationIsValid();
 			services.AddMediatR(typeof(Startup));
 		}
 
