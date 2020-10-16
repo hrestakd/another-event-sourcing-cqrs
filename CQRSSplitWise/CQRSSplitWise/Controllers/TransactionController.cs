@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using CQRSSplitWise.DAL.Read.Models;
 using CQRSSplitWise.Models.BindingModel;
 using CQRSSplitWise.Models.Dto;
+using CQRSSplitWise.Services.Read;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,20 +15,25 @@ namespace CQRSSplitWise.Controllers
 	{
 		private readonly IMediator _mediator;
 		private readonly IMapper _mapper;
+		private readonly TestService _testService;
 
-		public TransactionController(IMediator mediator, IMapper mapper)
+		public TransactionController(IMediator mediator, IMapper mapper, TestService testService)
 		{
 			_mediator = mediator;
 			_mapper = mapper;
+			_testService = testService;
 		}
 
 		[HttpPost("[action]")]
-		public async Task<Transaction> Insert(InsertTransaction request)
+		public async Task<TransactionHistory> Insert(InsertTransaction request)
 		{
-			var cmd = _mapper.Map<Domain.Commands.InsertTransactionCmd>(request);
-			var result = await _mediator.Send(cmd);
+			var transaction = await _testService.SaveDummyTransaction();
 
-			return result;
+			return transaction;
+			//var cmd = _mapper.Map<Domain.Commands.InsertTransactionCmd>(request);
+			//var result = await _mediator.Send(cmd);
+
+			//return result;
 		}
 	}
 }

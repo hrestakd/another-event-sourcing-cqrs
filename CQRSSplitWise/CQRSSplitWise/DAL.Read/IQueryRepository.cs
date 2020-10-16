@@ -9,6 +9,8 @@ namespace CQRSSplitWise.DAL.Read
 {
 	public interface IQueryRepository<TModel>
 	{
-		IEnumerable<TModel> GetData(List<Expression<Func<TransactionHistory, bool>>> filterExpressions);
+		IEnumerable<TModel> GetData(List<Expression<Func<TModel, bool>>> filterExpressions);
+
+		Task<TransactionHistory> InsertData(TModel model);
 	}
 }

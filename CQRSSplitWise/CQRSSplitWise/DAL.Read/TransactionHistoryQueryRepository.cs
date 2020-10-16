@@ -41,5 +41,12 @@ namespace CQRSSplitWise.DAL.Read
 
 			return history;
 		}
+
+		public async Task<TransactionHistory> InsertData(TransactionHistory model)
+		{
+			await _transactionHistory.InsertOneAsync(model);
+
+			return model;
+		}
 	}
 }

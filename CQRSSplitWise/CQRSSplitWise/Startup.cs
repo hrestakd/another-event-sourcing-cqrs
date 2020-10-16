@@ -34,10 +34,10 @@ namespace CQRSSplitWise
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<SplitWiseSQLContext>(x =>
-			{
-				x.UseSqlServer(Configuration["connectionStrings:SplitWiseSQLContext"]);
-			});
+			//services.AddDbContext<SplitWiseSQLContext>(x =>
+			//{
+			//	x.UseSqlServer(Configuration["connectionStrings:SplitWiseSQLContext"]);
+			//});
 
 			// Configure different collection configuration settings
 			services.Configure<TransactionHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
@@ -48,6 +48,7 @@ namespace CQRSSplitWise
 
 			services.AddScoped<UserHistoryService>();
 			services.AddScoped<GroupHistoryService>();
+			services.AddScoped<TestService>();
 
 			services.AddControllers();
 			services.AddAutoMapper(typeof(Startup));
@@ -67,7 +68,7 @@ namespace CQRSSplitWise
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
 			app.UseRouting();
 

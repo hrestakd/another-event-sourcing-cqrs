@@ -6,18 +6,14 @@ services:
     build:
       context: .
       dockerfile: CQRSSplitWise/Dockerfile
-    networks:
-      - cqrsapp
+    ports:
+      - "5000:80"
+    expose:
+      - 5000
     depends_on:
       - mongo
 
   mongo:
     image: mongo:latest
-    restart: always
-    command: mongod --port 27018
     ports:
-      - 27018:27018
-
-networks:
-    cqrsapp:
-        driver: bridge
+      - "27018:27017"
