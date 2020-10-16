@@ -9,19 +9,19 @@ using MongoDB.Driver;
 
 namespace CQRSSplitWise.DAL.Read
 {
-	public class GroupHistoryQueryRepository : IQueryRepository<GroupHistory>
+	public class TransactionHistoryQueryRepository : IQueryRepository<TransactionHistory>
 	{
-		private readonly IMongoCollection<GroupHistory> _groupHistory;
+		private readonly IMongoCollection<TransactionHistory> _groupHistory;
 
-		public GroupHistoryQueryRepository(GroupHistoryDBSettings config)
+		public TransactionHistoryQueryRepository(TransactionHistoryDBSettings config)
 		{
 			var client = new MongoClient(config.ConnectionString);
 			var db = client.GetDatabase(config.DatabaseName);
 
-			_groupHistory = db.GetCollection<GroupHistory>(config.GroupHistoryCollectionName);
+			_groupHistory = db.GetCollection<TransactionHistory>(config.TransactionHistoryCollectionName);
 		}
 
-		public IEnumerable<GroupHistory> GetData(Expression<Func<GroupHistory, bool>> filterExpression)
+		public IEnumerable<TransactionHistory> GetData(Expression<Func<TransactionHistory, bool>> filterExpression)
 		{
 			var history = _groupHistory.Find(filterExpression).ToEnumerable();
 

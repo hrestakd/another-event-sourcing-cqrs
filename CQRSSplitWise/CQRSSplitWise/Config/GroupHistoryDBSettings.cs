@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Config
 {
-	public class GroupHistoryDBSettings: NoSQLDBSettings
+	public class TransactionHistoryDBSettings: NoSQLDBSettings
 	{
-		public string GroupHistoryCollectionName { get; set; }
+		public string TransactionHistoryCollectionName { get; set; }
 	}
 }
