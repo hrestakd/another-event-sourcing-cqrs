@@ -13,6 +13,9 @@ using Microsoft.Extensions.Logging;
 using MediatR;
 using CQRSSplitWise.DAL.Context;
 using Microsoft.EntityFrameworkCore;
+using CQRSSplitWise.Config;
+using Microsoft.Extensions.Options;
+using CQRSSplitWise.DAL.Read;
 
 namespace CQRSSplitWise
 {
@@ -32,6 +35,17 @@ namespace CQRSSplitWise
 			{
 				x.UseSqlServer(Configuration["connectionStrings:SplitWiseSQLContext"]);
 			});
+
+			services.Configure<NoSQLDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
+
+			services.AddSingleton(x => x.GetRequiredService<IOptions<NoSQLDBSettings>>().Value);
+
+			services.AddTransient<GroupStateQueryRepository>();
+			services.AddTransient<GroupHistoryQueryRepository>();
+			services.AddTransient<UserHistoryQueryRepository>();
+			services.AddTransient<WalletStateQueryRepository>();
+
+			//services.AddTransient<TestService>();
 
 			services.AddControllers();
 			services.AddMediatR(typeof(Startup));
