@@ -29,7 +29,7 @@ namespace CQRSSplitWise.Domain.Handlers
 
 			_dbContext.Transactions.Add(transaction);
 
-			await _dbContext.SaveChangesAsync();
+			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			var transactionDto = _mapper.Map<Transaction>(transaction);
 

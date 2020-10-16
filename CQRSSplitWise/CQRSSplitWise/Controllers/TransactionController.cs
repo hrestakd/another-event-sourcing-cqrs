@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using CQRSSplitWise.Models.BindingModel;
 using CQRSSplitWise.Models.Dto;
@@ -11,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CQRSSplitWise.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class TransactionController : ControllerBase
 	{
 		private readonly IMediator _mediator;
@@ -23,7 +20,7 @@ namespace CQRSSplitWise.Controllers
 			_mapper = mapper;
 		}
 
-		[HttpPost]
+		[HttpPost("[action]")]
 		public async Task<Transaction> Insert(InsertTransaction request)
 		{
 			var cmd = _mapper.Map<Domain.Commands.InsertTransactionCmd>(request);

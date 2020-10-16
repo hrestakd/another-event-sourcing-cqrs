@@ -11,7 +11,7 @@ namespace CQRSSplitWise.Domain.Commands
 	public class InsertTransactionCmd : IRequest<Transaction>
 	{
 		public int UserId { get; set; }
-		public int SourceWalletId { get; set; }
+		public int? SourceWalletId { get; set; }
 		public int DestinationWalletId { get; set; }
 		public TransactionType TransactionType { get; set; }
 		public string Description { get; set; }

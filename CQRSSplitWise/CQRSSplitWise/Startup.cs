@@ -60,9 +60,11 @@ namespace CQRSSplitWise
 
 			services.AddControllers();
 			services.AddAutoMapper(typeof(Startup));
+
 			var configuration = new MapperConfiguration(cfg => cfg.AddMaps(new[] { typeof(Startup) }));
 			configuration.CompileMappings();
 			configuration.AssertConfigurationIsValid();
+
 			services.AddMediatR(typeof(Startup));
 		}
 

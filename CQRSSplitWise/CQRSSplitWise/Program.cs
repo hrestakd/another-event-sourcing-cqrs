@@ -23,7 +23,6 @@ namespace CQRSSplitWise
 				try
 				{
 					var context = scope.ServiceProvider.GetService<SplitWiseSQLContext>();
-					context.Database.EnsureDeleted();
 					context.Database.Migrate();
 				}
 				catch
