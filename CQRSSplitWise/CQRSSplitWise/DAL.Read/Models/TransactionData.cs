@@ -3,7 +3,7 @@ using CQRSSplitWise.Models.Enums;
 
 namespace CQRSSplitWise.DAL.Read.Models
 {
-	public class Transaction
+	public class TransactionData
 	{
 		public int GroupID { get; set; }
 		public DateTime TransactionDate { get; set; }

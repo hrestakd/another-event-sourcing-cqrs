@@ -40,20 +40,11 @@ namespace CQRSSplitWise
 			});
 
 			// Configure different collection configuration settings
-			services.Configure<UserHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
-			services.Configure<GroupStateDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
-			services.Configure<GroupHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
-			services.Configure<WalletStateDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
+			services.Configure<TransactionHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
 
-			services.AddSingleton(x => x.GetRequiredService<IOptions<UserHistoryDBSettings>>().Value);
-			services.AddSingleton(x => x.GetRequiredService<IOptions<GroupStateDBSettings>>().Value);
-			services.AddSingleton(x => x.GetRequiredService<IOptions<GroupHistoryDBSettings>>().Value);
-			services.AddSingleton(x => x.GetRequiredService<IOptions<WalletStateDBSettings>>().Value);
+			services.AddSingleton(x => x.GetRequiredService<IOptions<TransactionHistoryDBSettings>>().Value);
 
-			services.AddScoped<IQueryRepository<GroupState>, GroupStateQueryRepository>();
-			services.AddScoped<IQueryRepository<GroupHistory>, GroupHistoryQueryRepository>();
-			services.AddScoped<IQueryRepository<UserHistory>, UserHistoryQueryRepository>();
-			services.AddScoped<IQueryRepository<WalletState>, WalletStateQueryRepository>();
+			services.AddScoped<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
 
 			services.AddScoped<UserHistoryService>();
 			services.AddScoped<GroupHistoryService>();

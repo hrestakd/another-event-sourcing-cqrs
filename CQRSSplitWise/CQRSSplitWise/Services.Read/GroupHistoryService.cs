@@ -9,9 +9,9 @@ namespace CQRSSplitWise.Services.Read
 {
 	public class GroupHistoryService
 	{
-		private readonly IQueryRepository<GroupHistory> _repository;
+		private readonly IQueryRepository<TransactionHistory> _repository;
 
-		public GroupHistoryService(IQueryRepository<GroupHistory> repository)
+		public GroupHistoryService(IQueryRepository<TransactionHistory> repository)
 		{
 			_repository = repository;
 		}
