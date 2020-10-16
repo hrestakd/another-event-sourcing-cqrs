@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace CQRSSplitWise.DAL.Read.Models
 {
-	public class UserHistory
+	public class UserHistory : ReadModelBase
 	{
+		public UserData UserData { get; set; }
+		public IEnumerable<Transaction> Transactions { get; set; }
 	}
 }
