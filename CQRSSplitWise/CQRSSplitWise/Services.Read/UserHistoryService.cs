@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using AutoMapper;
 using AutoMapper.Internal;
 using CQRSSplitWise.DAL.Read;
 using CQRSSplitWise.DAL.Read.Models;
@@ -17,13 +18,15 @@ namespace CQRSSplitWise.Services.Read
 	public class UserHistoryService
 	{
 		private readonly IQueryRepository<TransactionHistory> _repository;
+		private readonly IMapper _mapper;
 
-		public UserHistoryService(IQueryRepository<TransactionHistory> repository)
+		public UserHistoryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
 		{
 			_repository = repository;
+			_mapper = mapper;
 		}
 
-		public IEnumerable<UserHistoryDTO> GetUserHistory(UserHistoryFilter filter)
+		public async Task<IEnumerable<UserHistoryDTO>> GetUserHistory(UserHistoryFilter filter)
 		{
 			var expressions = GenerateExpressions(filter);
 
@@ -31,35 +34,16 @@ namespace CQRSSplitWise.Services.Read
 
 			if (expressions == null || expressions.Count == 0)
 			{
-				transactionData = _repository.GetData(null);
+				transactionData = await _repository.GetData(null);
 			}
 			else
 			{
-				transactionData = _repository.GetData(expressions);
+				transactionData = await _repository.GetData(expressions);
 			}
 
-			var data = MapToUserHistory(transactionData);
+			var data = _mapper.Map<IEnumerable<UserHistoryDTO>>(transactionData);
 
 			return data;
-		}
-
-		IEnumerable<UserHistoryDTO> MapToUserHistory(IEnumerable<TransactionHistory> transactionHistory)
-		{
-			var userHistory = transactionHistory
-				.Select(x => new UserHistoryDTO
-				{
-					Name = x.UserData.Name,
-					LastName = x.UserData.LastName,
-					Amount = x.TransactionData.Amount,
-					Description = x.TransactionData.Description,
-					DestWalletName = x.TransactionData.DestWalletName,
-					SourceWalletName = x.TransactionData.SourceWalletName,
-					TransactionDate = x.TransactionData.TransactionDate,
-					TransactionType = x.TransactionData.TransactionType
-				})
-				.AsEnumerable();
-
-			return userHistory;
 		}
 
 		private List<Expression<Func<TransactionHistory, bool>>> GenerateExpressions(UserHistoryFilter filter)

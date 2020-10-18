@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CQRSSplitWise.Config;
 using CQRSSplitWise.DAL.Read.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -23,13 +24,13 @@ namespace CQRSSplitWise.DAL.Read
 			_transactionHistory = db.GetCollection<TransactionHistory>(config.TransactionHistoryCollectionName);
 		}
 
-		public IEnumerable<TransactionHistory> GetData(List<Expression<Func<TransactionHistory, bool>>> filterExpressions)
+		public async Task<IEnumerable<TransactionHistory>> GetData(IEnumerable<Expression<Func<TransactionHistory, bool>>> filterExpressions)
 		{
 			var transactionsExpression = _transactionHistory.AsQueryable();
 
-			if (filterExpressions == null || filterExpressions.Count == 0)
+			if (filterExpressions == null || filterExpressions.Count() == 0)
 			{
-				return transactionsExpression.AsEnumerable();
+				return await Task.FromResult(transactionsExpression.AsEnumerable());
 			}
 
 			foreach (var exp in filterExpressions)
@@ -37,7 +38,7 @@ namespace CQRSSplitWise.DAL.Read
 				transactionsExpression = transactionsExpression.Where(exp);
 			}
 
-			var history = transactionsExpression.AsEnumerable();
+			var history = await Task.FromResult(transactionsExpression.AsEnumerable());
 
 			return history;
 		}

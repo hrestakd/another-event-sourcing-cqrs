@@ -48,7 +48,7 @@ namespace CQRSSplitWise
 
 			services.AddScoped<UserHistoryService>();
 			services.AddScoped<GroupHistoryService>();
-			services.AddScoped<TestService>();
+			services.AddScoped<ProcessTransactionEventHandler>();
 
 			services.AddControllers();
 			services.AddAutoMapper(typeof(Startup));

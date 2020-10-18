@@ -15,25 +15,20 @@ namespace CQRSSplitWise.Controllers
 	{
 		private readonly IMediator _mediator;
 		private readonly IMapper _mapper;
-		private readonly TestService _testService;
 
-		public TransactionController(IMediator mediator, IMapper mapper, TestService testService)
+		public TransactionController(IMediator mediator, IMapper mapper)
 		{
 			_mediator = mediator;
 			_mapper = mapper;
-			_testService = testService;
 		}
 
 		[HttpPost("[action]")]
-		public async Task<TransactionHistory> Insert(InsertTransaction request)
+		public async Task<Transaction> Insert(InsertTransaction request)
 		{
-			var transaction = await _testService.SaveDummyTransaction();
+			var cmd = _mapper.Map<Domain.Commands.InsertTransactionCmd>(request);
+			var result = await _mediator.Send(cmd);
 
-			return transaction;
-			//var cmd = _mapper.Map<Domain.Commands.InsertTransactionCmd>(request);
-			//var result = await _mediator.Send(cmd);
-
-			//return result;
+			return result;
 		}
 	}
 }
