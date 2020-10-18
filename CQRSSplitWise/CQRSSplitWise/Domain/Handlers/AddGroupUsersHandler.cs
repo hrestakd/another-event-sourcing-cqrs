@@ -13,14 +13,14 @@ namespace CQRSSplitWise.Domain.Handlers
 {
 	public class AddGroupUsersHandler : IRequestHandler<AddGroupUsersCmd, IEnumerable<GroupUsers>>
 	{
-		//private readonly SplitWiseSQLContext _dbContext;
+		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
 
 		public AddGroupUsersHandler(
-			//SplitWiseSQLContext dbContext,
+			SplitWiseSQLContext dbContext,
 			IMapper mapper)
 		{
-			//_dbContext = dbContext;
+			_dbContext = dbContext;
 			_mapper = mapper;
 		}
 
@@ -41,9 +41,9 @@ namespace CQRSSplitWise.Domain.Handlers
 				groupUsers.Add(groupUser);
 			}
 
-			//_dbContext.GroupUsers.AddRange(groupUsers);
+			_dbContext.GroupUsers.AddRange(groupUsers);
 
-			//await _dbContext.SaveChangesAsync(cancellationToken);
+			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			// temp sln:
 			var groupUsersDto = new List<GroupUsers>();

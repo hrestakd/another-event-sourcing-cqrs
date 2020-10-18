@@ -13,14 +13,14 @@ namespace CQRSSplitWise.Domain.Handlers
 {
 	public class CreateGroupHandler : IRequestHandler<CreateGroupCmd, Group>
 	{
-		//private readonly SplitWiseSQLContext _dbContext;
+		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
 
 		public CreateGroupHandler(
-			//SplitWiseSQLContext dbContext,
+			SplitWiseSQLContext dbContext,
 			IMapper mapper)
 		{
-			//_dbContext = dbContext;
+			_dbContext = dbContext;
 			_mapper = mapper;
 		}
 
@@ -28,8 +28,8 @@ namespace CQRSSplitWise.Domain.Handlers
 		{
 			var group = _mapper.Map<DAL.Models.Group>(request);
 
-			//_dbContext.Groups.Add(group);
-			//await _dbContext.SaveChangesAsync(cancellationToken);
+			_dbContext.Groups.Add(group);
+			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			var groupUsers = new List<DAL.Models.GroupUser>();
 			foreach (var userId in request.GroupUserIds)
@@ -40,11 +40,11 @@ namespace CQRSSplitWise.Domain.Handlers
 					UserId = userId
 				});
 			}
-			//_dbContext.GroupUsers.AddRange(groupUsers);
+			_dbContext.GroupUsers.AddRange(groupUsers);
 
 			// TODO: try to use HiLo to generate IDs upfront:
 			// https://www.talkingdotnet.com/use-hilo-to-generate-keys-with-entity-framework-core/
-			//await _dbContext.SaveChangesAsync(cancellationToken);
+			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			var groupDto = _mapper.Map<Group>(group);
 

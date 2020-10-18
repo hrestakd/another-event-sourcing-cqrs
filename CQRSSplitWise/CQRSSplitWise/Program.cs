@@ -16,24 +16,23 @@ namespace CQRSSplitWise
 	{
 		public static void Main(string[] args)
 		{
-			//var host = CreateHostBuilder(args).Build();
+			var host = CreateHostBuilder(args).Build();
 
-			//using (var scope = host.Services.CreateScope())
-			//{
-			//	try
-			//	{
-			//		var context = scope.ServiceProvider.GetService<SplitWiseSQLContext>();
-			//		context.Database.Migrate();
-			//	}
-			//	catch
-			//	{
-			//		throw;
-			//	}
-			//}
+			using (var scope = host.Services.CreateScope())
+			{
+				try
+				{
+					var context = scope.ServiceProvider.GetService<SplitWiseSQLContext>();
+					context.Database.EnsureDeleted();
+					context.Database.Migrate();
+				}
+				catch
+				{
+					throw;
+				}
+			}
 
-			//host.Run();
-
-			CreateHostBuilder(args).Build().Run();
+			host.Run();
 		}
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>

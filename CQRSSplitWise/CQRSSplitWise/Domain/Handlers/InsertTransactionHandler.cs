@@ -13,14 +13,14 @@ namespace CQRSSplitWise.Domain.Handlers
 {
 	public class InsertTransactionHandler : IRequestHandler<InsertTransactionCmd, Transaction>
 	{
-		//private readonly SplitWiseSQLContext _dbContext;
+		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
 
 		public InsertTransactionHandler(
-			//SplitWiseSQLContext dbContext,
+			SplitWiseSQLContext dbContext,
 			IMapper mapper)
 		{
-			//_dbContext = dbContext;
+			_dbContext = dbContext;
 			_mapper = mapper;
 		}
 
@@ -29,9 +29,9 @@ namespace CQRSSplitWise.Domain.Handlers
 			var transaction = _mapper.Map<DAL.Models.Transaction>(request);
 			transaction.DateCreated = DateTime.UtcNow;
 
-			//_dbContext.Transactions.Add(transaction);
+			_dbContext.Transactions.Add(transaction);
 
-			//await _dbContext.SaveChangesAsync(cancellationToken);
+			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			var transactionDto = _mapper.Map<Transaction>(transaction);
 
