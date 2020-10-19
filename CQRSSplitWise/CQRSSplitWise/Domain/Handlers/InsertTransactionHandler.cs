@@ -15,13 +15,16 @@ namespace CQRSSplitWise.Domain.Handlers
 	{
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
+		private readonly RabbitMQPublisher _publisher;
 
 		public InsertTransactionHandler(
 			SplitWiseSQLContext dbContext,
-			IMapper mapper)
+			IMapper mapper,
+			RabbitMQPublisher publisher)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
+			_publisher = publisher;
 		}
 
 		public async Task<Transaction> Handle(InsertTransactionCmd request, CancellationToken cancellationToken)
@@ -34,6 +37,8 @@ namespace CQRSSplitWise.Domain.Handlers
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			var transactionDto = _mapper.Map<Transaction>(transaction);
+
+			_publisher.Publish();
 
 			return transactionDto;
 		}

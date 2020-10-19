@@ -13,6 +13,7 @@ services:
     depends_on:
       - mongo
       - sqldb
+      - rabbit
 
   mongo:
     image: mongo:latest
@@ -26,3 +27,15 @@ services:
     environment:
       SA_PASSWORD: "Password123!"
       ACCEPT_EULA: "Y"
+
+  rabbit:    
+    container_name: rabbit
+    hostname: rabbit    
+    image: rabbitmq:3-management-alpine   
+    environment:  
+      RABBITMQ_ERLANG_COOKIE: 7CfDZhuS2yQat4jr          
+    ports:      
+      - "4369:4369"
+      - "5672:5672"
+      - "25672:25672"
+      - "15672:15672"
