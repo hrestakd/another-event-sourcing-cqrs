@@ -13,6 +13,8 @@ namespace CQRSSplitWise.Mappings
 		public UserHistoryProfile()
 		{
 			CreateMap<TransactionHistory, UserHistoryDTO>()
+				.IgnoreAllPropertiesWithAnInaccessibleSetter()
+				.IgnoreAllSourcePropertiesWithAnInaccessibleSetter()
 				.ForMember(x => x.Name, x => x.MapFrom(y => y.SourceUserData.Name))
 				.ForMember(x => x.LastName, x => x.MapFrom(y => y.SourceUserData.LastName))
 				.ForMember(x => x.Amount, x => x.MapFrom(y => y.TransactionData.Amount))

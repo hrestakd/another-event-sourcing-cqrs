@@ -22,9 +22,9 @@ namespace CQRSSplitWise.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public async Task<IEnumerable<UserHistoryDTO>> GetUserHistory(UserHistoryFilter filter)
+		public async Task<IEnumerable<UserHistoryDTO>> GetUserHistory()
 		{
-			var results = await _userQueryService.GetUserHistory(filter);
+			var results = await _userQueryService.GetUserHistory(new UserHistoryFilter());
 
 			return results;
 		}

@@ -38,67 +38,65 @@ namespace CQRSSplitWise.DAL.Read
 
 			var groupByPayerAggregator = transactionCollection
 				.Aggregate()
-				.Group(x => x.SourceUserData.UserID,
+				.Group(x => new { PayerID = x.SourceUserData.UserID, PayeeID = x.DestUserData.UserID },
 					x => new
 					{
-						PayerID = x.Key,
-						TransactionsPerPayee = x
-							.GroupBy(y => y.DestUserData.UserID)
-							.Select(y => new
-							{
-								PayeeID = y.Key,
-								TransactionsSum = y
-									.Sum(z => z.TransactionData.TransactionType == TransactionType.Refund
-										? z.TransactionData.Amount * -1
-										: z.TransactionData.Amount)
-							})
+						Key = x.Key,
+						TransactionSum = x.Sum(z => z.TransactionData.TransactionType == TransactionType.Refund
+							? z.TransactionData.Amount * -1
+							: z.TransactionData.Amount)
 					})
-				.Project(x => x.TransactionsPerPayee
-					.Select(y => new UserStatusView
+				.Project(x =>  new UserStatusView
 					{
-						SourceUserData = new Views.UserData { UserID = x.PayerID },
-						DestUserData = new Views.UserData { UserID = y.PayeeID },
-						UserBalance = y.TransactionsSum
-					}));
+						SourceUserData = new Views.UserData { UserID = x.Key.PayerID },
+						DestUserData = new Views.UserData { UserID = x.Key.PayeeID },
+						UserBalance = x.TransactionSum
+					});
 
-			var payerViewPipeline = PipelineDefinition<TransactionHistory, IEnumerable<UserStatusView>>.Create(groupByPayerAggregator.Stages);
+			var payerViewPipeline = PipelineDefinition<TransactionHistory, UserStatusView>.Create(groupByPayerAggregator.Stages);
 
 			// These users will not have a record in the previous pipeline so it is safe to combine them
 			// Balance logic has to be inverted here
-			var usersWithoutPaymentsAggregator = transactionCollection
-				.Aggregate()
-				.Match(x => usersWithoutPaymentIDs.Contains(x.DestUserData.UserID))
-				.Group(x => x.DestUserData.UserID,
-					x => new
-					{
-						PayeeID = x.Key,
-						TransactionsPerPayer = x
-							.GroupBy(y => y.SourceUserData.UserID)
-							.Select(y => new
-							{
-								PayerID = y.Key,
-								TransactionsSum = y
-									.Sum(z => z.TransactionData.TransactionType == TransactionType.Refund
-										? z.TransactionData.Amount
-										: z.TransactionData.Amount * -1)
-							})
-					})	
-				.Project(x => x.TransactionsPerPayer
-					.Select(y => new UserStatusView
-					{
-						SourceUserData = new Views.UserData { UserID = x.PayeeID },
-						DestUserData = new Views.UserData { UserID = y.PayerID },
-						UserBalance = y.TransactionsSum
-					}));
+			//var usersWithoutPaymentsAggregator = transactionCollection
+			//	.Aggregate()
+			//	.Match(x => usersWithoutPaymentIDs.Contains(x.DestUserData.UserID))
+			//	.Group(x => x.DestUserData.UserID,
+			//		x => new
+			//		{
+			//			PayeeID = x.Key,
+			//			TransactionsPerPayer = x
+			//				.GroupBy(y => y.SourceUserData.UserID)
+			//				.Select(y => new
+			//				{
+			//					PayerID = y.Key,
+			//					TransactionsSum = y
+			//						.Sum(z => z.TransactionData.TransactionType == TransactionType.Refund
+			//							? z.TransactionData.Amount
+			//							: z.TransactionData.Amount * -1)
+			//				})
+			//		})	
+			//	.Project(x => x.TransactionsPerPayer
+			//		.Select(y => new UserStatusView
+			//		{
+			//			SourceUserData = new Views.UserData { UserID = x.PayeeID },
+			//			DestUserData = new Views.UserData { UserID = y.PayerID },
+			//			UserBalance = y.TransactionsSum
+			//		}));
 
 			// Combine the pipelines
-			var combinedAggreggator = usersWithoutPaymentsAggregator
-				.UnionWith(transactionCollection, payerViewPipeline);
+			//var combinedAggreggator = usersWithoutPaymentsAggregator
+			//	.UnionWith(transactionCollection, payerViewPipeline);
 
-			var customerViewPipeline = PipelineDefinition<TransactionHistory, IEnumerable<UserStatusView>>.Create(combinedAggreggator.Stages);
+			//var customerViewPipeline = PipelineDefinition<TransactionHistory, IEnumerable<UserStatusView>>.Create(combinedAggreggator.Stages);
 
-			db.CreateView(_userStateViewName, config.TransactionHistoryCollectionName, customerViewPipeline);
+			try
+			{
+				db.CreateView(_userStateViewName, config.TransactionHistoryCollectionName, payerViewPipeline);
+			}
+			catch
+			{
 
+			}
 			_userStatusView = db.GetCollection<UserStatusView>(_userStateViewName);
 		}
 

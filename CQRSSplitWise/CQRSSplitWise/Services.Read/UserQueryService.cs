@@ -46,7 +46,11 @@ namespace CQRSSplitWise.Services.Read
 				transactionData = await _repository.GetData(expressions);
 			}
 
-			var data = _mapper.Map<IEnumerable<UserHistoryDTO>>(transactionData);
+			var data = new List<UserHistoryDTO>();
+			foreach (var item in transactionData)
+			{
+				data.Add(_mapper.Map<UserHistoryDTO>(item));
+			}
 
 			return data;
 		}
