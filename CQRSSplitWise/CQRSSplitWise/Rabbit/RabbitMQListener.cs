@@ -22,10 +22,10 @@ namespace CQRSSplitWise.Rabbit
 			_channelPool.UseTransactionChannel((channel, queueName) =>
 			{
 				var consumer = new EventingBasicConsumer(channel);
-				consumer.Received += async (model, ea) =>
+				consumer.Received += async (model, eventArgs) =>
 				{
-					var eventData = ea.Body.ToArray();
-					await _transactionEventHandler.ProcessEvent(eventData);
+					var transactionEvent = eventArgs.Body.ToArray();
+					await _transactionEventHandler.ProcessEvent(transactionEvent);
 				};
 
 				channel.BasicConsume(queue: queueName,

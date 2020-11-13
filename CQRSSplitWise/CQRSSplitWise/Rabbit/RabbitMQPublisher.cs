@@ -20,12 +20,13 @@ namespace CQRSSplitWise.Rabbit
 		{
 			_channelPool.UseTransactionChannel((channel, queueName) =>
 			{
-				var eventData = Extensions.ObjectToByteArray(transactionEventData);
+				var transactionEvent = new TransactionEvent(transactionEventData, null);
+				var body = Extensions.ObjectToByteArray(transactionEvent);
 				channel.BasicPublish(
 					exchange: "",
 					routingKey: queueName,
 					basicProperties: null,
-					body: eventData);
+					body: body);
 			});
         }
 	}

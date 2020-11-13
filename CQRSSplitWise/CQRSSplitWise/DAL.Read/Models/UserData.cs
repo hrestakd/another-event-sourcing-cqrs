@@ -10,6 +10,6 @@ namespace CQRSSplitWise.DAL.Read.Models
 		public int UserID { get; set; }
 		public string Name { get; set; }
 		public string LastName { get; set; }
-		public IEnumerable<int> GroupIDs { get; set; }
+		public IEnumerable<int> GroupIDs { get; set; } = Enumerable.Empty<int>();
 	}
 }

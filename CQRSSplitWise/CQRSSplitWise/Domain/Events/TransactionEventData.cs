@@ -3,7 +3,6 @@ using CQRSSplitWise.Models.Enums;
 
 namespace CQRSSplitWise.Domain.Events
 {
-	[Serializable]
 	public class TransactionEventData
 	{
 		public int SourceUserId { get; set; }

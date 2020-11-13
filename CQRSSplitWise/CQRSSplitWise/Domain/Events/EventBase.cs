@@ -1,15 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CQRSSplitWise.Domain.Events
 {
+	[Serializable]
 	public abstract class EventBase
 	{
-		protected Guid EventID { get; set; }
-		protected string EventType { get; set; }
+		public Guid EventID { get; protected set; }
+		public string EventType { get; protected set; }
 		protected string EventData { get; set; }
 		protected string EventMetadata { get; set; }
+
+		public T GetEventData<T>()
+		{
+			var eventData = JsonConvert.DeserializeObject<T>(EventData);
+			return eventData;
+		}
+
+		public T GetEventMetadata<T>()
+		{
+			var eventMetadata = JsonConvert.DeserializeObject<T>(EventMetadata);
+			return eventMetadata;
+		}
 	}
 }
