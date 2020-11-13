@@ -8,9 +8,9 @@ namespace CQRSSplitWise.Services.Read
 {
 	public class ProcessTransactionEventHandler
 	{
-		private readonly IQueryRepository<TransactionHistory> _repository;
+		private readonly IInsertRepository<TransactionHistory> _repository;
 
-		public ProcessTransactionEventHandler(IQueryRepository<TransactionHistory> repository)
+		public ProcessTransactionEventHandler(IInsertRepository<TransactionHistory> repository)
 		{
 			_repository = repository;
 		}

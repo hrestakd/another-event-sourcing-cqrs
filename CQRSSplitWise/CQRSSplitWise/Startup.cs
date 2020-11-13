@@ -41,6 +41,7 @@ namespace CQRSSplitWise
 			services.AddSingleton(x => x.GetRequiredService<IOptions<TransactionHistoryDBSettings>>().Value);
 
 			services.AddTransient<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
+			services.AddTransient<IInsertRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
 			services.AddTransient<IQueryRepository<UserStatusView>, UserStatusViewRepository>();
 
 			services.AddScoped<UserQueryService>();

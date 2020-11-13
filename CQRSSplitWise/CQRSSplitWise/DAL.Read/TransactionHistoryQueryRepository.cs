@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CQRSSplitWise.DAL.Read
 {
-	public class TransactionHistoryQueryRepository : IQueryRepository<TransactionHistory>
+	public class TransactionHistoryQueryRepository : IQueryRepository<TransactionHistory>, IInsertRepository<TransactionHistory>
 	{
 		private readonly IMongoCollection<TransactionHistory> _transactionHistory;
 
