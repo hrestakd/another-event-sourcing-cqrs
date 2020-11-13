@@ -65,17 +65,17 @@ namespace CQRSSplitWise.Services.Read
 
 			if (filter.UserID > 0)
 			{
-				expressions.Add(x => x.UserData.UserID == filter.UserID);
+				expressions.Add(x => x.SourceUserData.UserID == filter.UserID);
 			}
 
 			if (!string.IsNullOrWhiteSpace(filter.UserName))
 			{
-				expressions.Add(x => x.UserData.Name.Contains(filter.UserName, StringComparison.InvariantCultureIgnoreCase));
+				expressions.Add(x => x.SourceUserData.Name.Contains(filter.UserName, StringComparison.InvariantCultureIgnoreCase));
 			}
 
 			if (!string.IsNullOrWhiteSpace(filter.UserLastName))
 			{
-				expressions.Add(x => x.UserData.LastName.Contains(filter.UserLastName, StringComparison.InvariantCultureIgnoreCase));
+				expressions.Add(x => x.SourceUserData.LastName.Contains(filter.UserLastName, StringComparison.InvariantCultureIgnoreCase));
 			}
 
 			if (filter.AmountFrom > 0)

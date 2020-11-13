@@ -7,7 +7,8 @@ namespace CQRSSplitWise.DAL.Read.Models
 	{
 		public int GroupID { get; set; }
 		public DateTime TransactionDate { get; set; }
-		public string SourceWalletName { get; set; } 
+		// Source/Dest wallet will not be used atm
+		public string SourceWalletName { get; set; }
 		public string DestWalletName { get; set; }
 		public decimal Amount { get; set; }
 		public string Description { get; set; }

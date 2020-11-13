@@ -13,8 +13,8 @@ namespace CQRSSplitWise.Mappings
 		public UserHistoryProfile()
 		{
 			CreateMap<TransactionHistory, UserHistoryDTO>()
-				.ForMember(x => x.Name, x => x.MapFrom(y => y.UserData.Name))
-				.ForMember(x => x.LastName, x => x.MapFrom(y => y.UserData.LastName))
+				.ForMember(x => x.Name, x => x.MapFrom(y => y.SourceUserData.Name))
+				.ForMember(x => x.LastName, x => x.MapFrom(y => y.SourceUserData.LastName))
 				.ForMember(x => x.Amount, x => x.MapFrom(y => y.TransactionData.Amount))
 				.ForMember(x => x.Description, x => x.MapFrom(y => y.TransactionData.Description))
 				.ForMember(x => x.DestWalletName, x => x.MapFrom(y => y.TransactionData.DestWalletName))
