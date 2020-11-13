@@ -10,13 +10,20 @@ namespace CQRSSplitWise.Domain.Events
 	{
 		private readonly string _eventType = "TransactionCreated";
 
-		public TransactionEvent(object eventData, object eventMetadata)
+		public TransactionEvent(TransactionEventData eventData, object eventMetadata)
 		{
 			EventID = Guid.NewGuid();
 			EventType = _eventType;
 
-			EventData = JsonConvert.SerializeObject(eventData, Formatting.Indented);
-			EventMetadata = JsonConvert.SerializeObject(eventMetadata, Formatting.Indented);
+			if (eventData != null)
+			{
+				EventData = JsonConvert.SerializeObject(eventData, Formatting.Indented);
+			}
+
+			if (eventMetadata != null)
+			{
+				EventMetadata = JsonConvert.SerializeObject(eventMetadata, Formatting.Indented);
+			}
 		}
 	}
 }

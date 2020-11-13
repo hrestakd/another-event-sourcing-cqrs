@@ -16,7 +16,7 @@ namespace CQRSSplitWise
 
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
-			_rabbitListener.Subscribe();
+			_rabbitListener.SubscribeTransactionConsumer();
 			return Task.CompletedTask;
 		}
 

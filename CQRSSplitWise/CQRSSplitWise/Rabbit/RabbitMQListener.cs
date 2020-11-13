@@ -17,15 +17,10 @@ namespace CQRSSplitWise.Rabbit
 			_channelPool = channelPool;
 		}
 
-		public void Subscribe()
+		public void SubscribeTransactionConsumer()
 		{
-			// get channel from the object pool
-			var channel = _channelPool.Get();
-
-			try
+			_channelPool.UseTransactionChannel((channel, queueName) =>
 			{
-				var queueName = channel.DeclareTransactionQueue();
-
 				var consumer = new EventingBasicConsumer(channel);
 				consumer.Received += async (model, ea) =>
 				{
@@ -36,12 +31,7 @@ namespace CQRSSplitWise.Rabbit
 				channel.BasicConsume(queue: queueName,
 										autoAck: true,
 										consumer: consumer);
-			}
-			finally
-			{
-				// return object to the pool
-				_channelPool.Return(channel);
-			}
+			});
         }
 	}
 }

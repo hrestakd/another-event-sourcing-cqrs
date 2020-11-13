@@ -1,4 +1,7 @@
 ﻿using System.Text;
+using AutoMapper;
+using CQRSSplitWise.Domain.Events;
+using CQRSSplitWise.Models.Dto;
 using Microsoft.Extensions.ObjectPool;
 using RabbitMQ.Client;
 
@@ -13,28 +16,17 @@ namespace CQRSSplitWise.Rabbit
 			_channelPool = channelPool;
 		}
 
-		public void Publish()
+		public void PublishTransactionEvent(TransactionEventData transactionEventData)
 		{
-			// get channel from the object pool
-			var channel = _channelPool.Get();
-			
-			try
+			_channelPool.UseTransactionChannel((channel, queueName) =>
 			{
-				var queueName = channel.DeclareTransactionQueue();
-				string message = "Hello World!";
-				var body = Encoding.UTF8.GetBytes(message);
-
+				var eventData = Extensions.ObjectToByteArray(transactionEventData);
 				channel.BasicPublish(
 					exchange: "",
 					routingKey: queueName,
 					basicProperties: null,
-					body: body);
-			}
-			finally
-			{
-				// return object to the pool
-				_channelPool.Return(channel);
-			}
+					body: eventData);
+			});
         }
 	}
 }

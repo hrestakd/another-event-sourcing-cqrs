@@ -1,4 +1,6 @@
-﻿using RabbitMQ.Client;
+﻿using System;
+using Microsoft.Extensions.ObjectPool;
+using RabbitMQ.Client;
 
 namespace CQRSSplitWise.Rabbit
 {
@@ -21,6 +23,32 @@ namespace CQRSSplitWise.Rabbit
 					arguments: null);
 			
 			return result.QueueName;
+		}
+
+		/// <summary>
+		/// Uses a transaction channel from the object pool and executes the provided action
+		/// </summary>
+		/// <param name="channelPool"></param>
+		/// <param name="action"></param>
+		public static void UseTransactionChannel(this ObjectPool<IModel> channelPool, Action<IModel, string> action)
+		{
+			// get channel from the object pool
+			var channel = channelPool.Get();
+
+			try
+			{
+				var queueName = channel.DeclareTransactionQueue();
+				action(channel, queueName);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+			finally
+			{
+				// return object to the pool
+				channelPool.Return(channel);
+			}
 		}
 	}
 }
