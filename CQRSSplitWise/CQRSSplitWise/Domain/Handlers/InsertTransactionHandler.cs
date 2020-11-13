@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using CQRSSplitWise.DAL.Context;
 using CQRSSplitWise.Domain.Commands;
 using CQRSSplitWise.Models.Dto;
+using CQRSSplitWise.Rabbit;
 using MediatR;
 
 namespace CQRSSplitWise.Domain.Handlers

@@ -1,24 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using CQRSSplitWise.Config;
+using CQRSSplitWise.DAL.Context;
+using CQRSSplitWise.DAL.Read;
+using CQRSSplitWise.DAL.Read.Models;
+using CQRSSplitWise.Rabbit;
+using CQRSSplitWise.Services.Read;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using MediatR;
-using CQRSSplitWise.DAL.Context;
-using Microsoft.EntityFrameworkCore;
-using CQRSSplitWise.Config;
+using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
-using CQRSSplitWise.DAL.Read;
-using CQRSSplitWise.Services.Read;
-using CQRSSplitWise.DAL.Read.Models;
-using AutoMapper;
 
 namespace CQRSSplitWise
 {
@@ -59,8 +54,17 @@ namespace CQRSSplitWise
 
 			services.AddMediatR(typeof(Startup));
 
+			services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+			services.AddSingleton(x =>
+			{
+				var provider = x.GetRequiredService<ObjectPoolProvider>();
+				// initialize the rabbit channel and keep it in the object pool
+				return provider.Create(new RabbitModelObjectPoolPolicy());
+			});
 			services.AddSingleton<RabbitMQListener>();
 			services.AddSingleton<RabbitMQPublisher>();
+
+			services.AddHostedService<Initializer>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
