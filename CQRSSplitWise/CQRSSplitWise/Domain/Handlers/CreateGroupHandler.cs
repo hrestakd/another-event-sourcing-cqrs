@@ -16,7 +16,9 @@ namespace CQRSSplitWise.Domain.Handlers
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
 
-		public CreateGroupHandler(SplitWiseSQLContext dbContext, IMapper mapper)
+		public CreateGroupHandler(
+			SplitWiseSQLContext dbContext,
+			IMapper mapper)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;

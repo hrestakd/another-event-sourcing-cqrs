@@ -44,10 +44,11 @@ namespace CQRSSplitWise
 
 			services.AddSingleton(x => x.GetRequiredService<IOptions<TransactionHistoryDBSettings>>().Value);
 
-			services.AddScoped<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
+			services.AddTransient<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
 
 			services.AddScoped<UserHistoryService>();
 			services.AddScoped<GroupHistoryService>();
+			services.AddTransient<ProcessTransactionEventHandler>();
 
 			services.AddControllers();
 			services.AddAutoMapper(typeof(Startup));
@@ -57,6 +58,9 @@ namespace CQRSSplitWise
 			configuration.AssertConfigurationIsValid();
 
 			services.AddMediatR(typeof(Startup));
+
+			services.AddSingleton<RabbitMQListener>();
+			services.AddSingleton<RabbitMQPublisher>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +71,7 @@ namespace CQRSSplitWise
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
 			app.UseRouting();
 
@@ -77,6 +81,8 @@ namespace CQRSSplitWise
 			{
 				endpoints.MapControllers();
 			});
+
+			app.ApplicationServices.GetService<RabbitMQListener>();
 		}
 	}
 }

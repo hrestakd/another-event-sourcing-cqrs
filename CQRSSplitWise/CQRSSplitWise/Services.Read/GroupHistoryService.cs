@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using AutoMapper;
 using CQRSSplitWise.DAL.Read;
 using CQRSSplitWise.DAL.Read.Models;
 using CQRSSplitWise.DTO.Read;
@@ -13,51 +14,35 @@ namespace CQRSSplitWise.Services.Read
 	public class GroupHistoryService
 	{
 		private readonly IQueryRepository<TransactionHistory> _repository;
+		private readonly IMapper _mapper;
 
-		public GroupHistoryService(IQueryRepository<TransactionHistory> repository)
+		public GroupHistoryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
 		{
 			_repository = repository;
+			_mapper = mapper;
 		}
 
-		public IEnumerable<GroupHistoryDTO> GetUserHistory(GroupHistoryFilter filter)
+		public async Task<IEnumerable<GroupHistoryDTO>> GetGroupHistory(GroupHistoryFilter filter)
 		{
-			var expressions = GenerateExpressions(filter);
+			var expressions = await GenerateExpressions(filter);
 
 			IEnumerable<TransactionHistory> transactionData;
 
-			if (expressions == null || expressions.Count == 0)
+			if (expressions == null || expressions.Count() == 0)
 			{
-				transactionData = _repository.GetData(null);
+				transactionData = await _repository.GetData(null);
 			}
 			else
 			{
-				transactionData = _repository.GetData(expressions);
+				transactionData = await _repository.GetData(expressions);
 			}
 
-			var data = MapToGroupHistory(transactionData);
+			var data = _mapper.Map<IEnumerable<GroupHistoryDTO>>(transactionData);
 
 			return data;
 		}
 
-		IEnumerable<GroupHistoryDTO> MapToGroupHistory(IEnumerable<TransactionHistory> transactionHistory)
-		{
-			var groupHistory = transactionHistory
-				.Select(x => new GroupHistoryDTO
-				{
-					Name = x.GroupData.GroupName,
-					Amount = x.TransactionData.Amount,
-					Description = x.TransactionData.Description,
-					DestWalletName = x.TransactionData.DestWalletName,
-					SourceWalletName = x.TransactionData.SourceWalletName,
-					TransactionDate = x.TransactionData.TransactionDate,
-					TransactionType = x.TransactionData.TransactionType
-				})
-				.AsEnumerable();
-
-			return groupHistory;
-		}
-
-		private List<Expression<Func<TransactionHistory, bool>>> GenerateExpressions(GroupHistoryFilter filter)
+		private async Task<IEnumerable<Expression<Func<TransactionHistory, bool>>>> GenerateExpressions(GroupHistoryFilter filter)
 		{
 			var expressions = new List<Expression<Func<TransactionHistory, bool>>>
 			{
@@ -104,7 +89,7 @@ namespace CQRSSplitWise.Services.Read
 				expressions.Add(x => x.TransactionData.TransactionType == filter.TransactionType);
 			}
 
-			return expressions;
+			return await Task.FromResult(expressions);
 		}
 	}
 }

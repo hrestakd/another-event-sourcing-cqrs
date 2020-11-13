@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using CQRSSplitWise.DAL.Read.Models;
 using CQRSSplitWise.Models.BindingModel;
 using CQRSSplitWise.Models.Dto;
+using CQRSSplitWise.Services.Read;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
