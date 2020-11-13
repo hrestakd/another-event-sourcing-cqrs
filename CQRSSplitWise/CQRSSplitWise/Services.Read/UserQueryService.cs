@@ -15,12 +15,12 @@ using CQRSSplitWise.Filters.Read;
 
 namespace CQRSSplitWise.Services.Read
 {
-	public class UserHistoryService
+	public class UserQueryService
 	{
 		private readonly IQueryRepository<TransactionHistory> _repository;
 		private readonly IMapper _mapper;
 
-		public UserHistoryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
+		public UserQueryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;
@@ -44,6 +44,11 @@ namespace CQRSSplitWise.Services.Read
 			var data = _mapper.Map<IEnumerable<UserHistoryDTO>>(transactionData);
 
 			return data;
+		}
+
+		public async Task GetUserState(int userID)
+		{
+			return;
 		}
 
 		private List<Expression<Func<TransactionHistory, bool>>> GenerateExpressions(UserHistoryFilter filter)

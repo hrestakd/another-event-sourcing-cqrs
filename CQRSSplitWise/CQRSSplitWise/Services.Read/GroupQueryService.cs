@@ -11,12 +11,12 @@ using CQRSSplitWise.Filters.Read;
 
 namespace CQRSSplitWise.Services.Read
 {
-	public class GroupHistoryService
+	public class GroupQueryService
 	{
 		private readonly IQueryRepository<TransactionHistory> _repository;
 		private readonly IMapper _mapper;
 
-		public GroupHistoryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
+		public GroupQueryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;
@@ -40,6 +40,11 @@ namespace CQRSSplitWise.Services.Read
 			var data = _mapper.Map<IEnumerable<GroupHistoryDTO>>(transactionData);
 
 			return data;
+		}
+
+		public async Task GetGroupState(int groupID)
+		{
+			return;
 		}
 
 		private async Task<IEnumerable<Expression<Func<TransactionHistory, bool>>>> GenerateExpressions(GroupHistoryFilter filter)

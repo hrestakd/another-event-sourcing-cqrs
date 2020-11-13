@@ -46,8 +46,8 @@ namespace CQRSSplitWise
 
 			services.AddTransient<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
 
-			services.AddScoped<UserHistoryService>();
-			services.AddScoped<GroupHistoryService>();
+			services.AddScoped<UserQueryService>();
+			services.AddScoped<GroupQueryService>();
 			services.AddTransient<ProcessTransactionEventHandler>();
 
 			services.AddControllers();

@@ -11,21 +11,27 @@ namespace CQRSSplitWise.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class UserHistoryController : ControllerBase
+	public class UserQueryController : ControllerBase
 	{
-		private readonly UserHistoryService _userHistoryService;
+		private readonly UserQueryService _userQueryService;
 
-		public UserHistoryController(UserHistoryService userHistoryService)
+		public UserQueryController(UserQueryService userQueryService)
 		{
-			_userHistoryService = userHistoryService;
+			_userQueryService = userQueryService;
 		}
 
 		[HttpGet("[action]")]
 		public async Task<IEnumerable<UserHistoryDTO>> GetUserHistory(UserHistoryFilter filter)
 		{
-			var results = await _userHistoryService.GetUserHistory(filter);
+			var results = await _userQueryService.GetUserHistory(filter);
 
 			return results;
+		}
+
+		[HttpGet("[action]")]
+		public async Task GetUserState(int userID)
+		{
+			await _userQueryService.GetUserState(userID);
 		}
 	}
 }

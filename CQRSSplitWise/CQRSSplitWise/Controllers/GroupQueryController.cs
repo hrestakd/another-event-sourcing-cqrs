@@ -11,21 +11,27 @@ namespace CQRSSplitWise.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class GroupHistoryController:ControllerBase
+	public class GroupQueryController : ControllerBase
 	{
-		private readonly GroupHistoryService _groupHistoryService;
+		private readonly GroupQueryService _groupQueryervice;
 
-		public GroupHistoryController(GroupHistoryService groupHistoryService)
+		public GroupQueryController(GroupQueryService groupQueryervice)
 		{
-			_groupHistoryService = groupHistoryService;
+			_groupQueryervice = groupQueryervice;
 		}
 
 		[HttpGet("[action]")]
 		public async Task<IEnumerable<GroupHistoryDTO>> GetGroupHistory(GroupHistoryFilter filter)
 		{
-			var results = await _groupHistoryService.GetGroupHistory(filter);
+			var results = await _groupQueryervice.GetGroupHistory(filter);
 
 			return results;
+		}
+
+		[HttpGet("[action]")]
+		public async Task GetGroupState(int groupID)
+		{
+			await _groupQueryervice.GetGroupState(groupID);
 		}
 	}
 }
