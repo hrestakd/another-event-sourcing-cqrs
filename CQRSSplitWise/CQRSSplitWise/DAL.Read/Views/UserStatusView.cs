@@ -11,11 +11,4 @@ namespace CQRSSplitWise.DAL.Read.Views
 		public UserData DestUserData { get; set; }
 		public decimal UserBalance { get; set; }
 	}
-
-	public class UserData
-	{
-		public int UserID { get; set; }
-		public string Name { get; set; }
-		public string LastName { get; set; }
-	}
 }

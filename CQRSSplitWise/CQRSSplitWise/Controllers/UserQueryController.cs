@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CQRSSplitWise.DAL.Read.Views;
 using CQRSSplitWise.DTO.Read;
 using CQRSSplitWise.Filters.Read;
 using CQRSSplitWise.Services.Read;
@@ -29,9 +30,11 @@ namespace CQRSSplitWise.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public async Task GetUserState(int userID)
+		public async Task<IEnumerable<UserStatusView>> GetUserState(int userID)
 		{
-			await _userQueryService.GetUserState(userID);
+			var userState = await _userQueryService.GetUserState(userID);
+
+			return userState;
 		}
 	}
 }

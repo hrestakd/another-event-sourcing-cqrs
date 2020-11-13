@@ -3,6 +3,7 @@ using CQRSSplitWise.Config;
 using CQRSSplitWise.DAL.Context;
 using CQRSSplitWise.DAL.Read;
 using CQRSSplitWise.DAL.Read.Models;
+using CQRSSplitWise.DAL.Read.Views;
 using CQRSSplitWise.Rabbit;
 using CQRSSplitWise.Services.Read;
 using MediatR;
@@ -40,6 +41,7 @@ namespace CQRSSplitWise
 			services.AddSingleton(x => x.GetRequiredService<IOptions<TransactionHistoryDBSettings>>().Value);
 
 			services.AddTransient<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
+			services.AddTransient<IQueryRepository<UserStatusView>, UserStatusViewRepository>();
 
 			services.AddScoped<UserQueryService>();
 			services.AddScoped<GroupQueryService>();

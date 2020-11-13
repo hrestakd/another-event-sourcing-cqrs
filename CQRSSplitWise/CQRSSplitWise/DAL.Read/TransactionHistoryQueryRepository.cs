@@ -1,14 +1,12 @@
-﻿using System;
+﻿using CQRSSplitWise.Config;
+using CQRSSplitWise.DAL.Read.Models;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using CQRSSplitWise.Config;
-using CQRSSplitWise.DAL.Read.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 
 namespace CQRSSplitWise.DAL.Read
 {

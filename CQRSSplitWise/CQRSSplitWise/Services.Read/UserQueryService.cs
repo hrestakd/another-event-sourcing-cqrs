@@ -10,6 +10,7 @@ using AutoMapper;
 using AutoMapper.Internal;
 using CQRSSplitWise.DAL.Read;
 using CQRSSplitWise.DAL.Read.Models;
+using CQRSSplitWise.DAL.Read.Views;
 using CQRSSplitWise.DTO.Read;
 using CQRSSplitWise.Filters.Read;
 
@@ -18,11 +19,15 @@ namespace CQRSSplitWise.Services.Read
 	public class UserQueryService
 	{
 		private readonly IQueryRepository<TransactionHistory> _repository;
+		private readonly IQueryRepository<UserStatusView> _userStatusRepository;
 		private readonly IMapper _mapper;
 
-		public UserQueryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
+		public UserQueryService(IQueryRepository<TransactionHistory> repository,
+			IMapper mapper,
+			IQueryRepository<UserStatusView> userStatusRepository)
 		{
 			_repository = repository;
+			_userStatusRepository = userStatusRepository;
 			_mapper = mapper;
 		}
 
@@ -46,9 +51,16 @@ namespace CQRSSplitWise.Services.Read
 			return data;
 		}
 
-		public async Task GetUserState(int userID)
+		public async Task<IEnumerable<UserStatusView>> GetUserState(int userID)
 		{
-			return;
+			var expressions = new List<Expression<Func<UserStatusView, bool>>>
+			{
+				x => x.SourceUserData.UserID == userID
+			};
+
+			var userStatus = await _userStatusRepository.GetData(expressions);
+
+			return userStatus;
 		}
 
 		private List<Expression<Func<TransactionHistory, bool>>> GenerateExpressions(UserHistoryFilter filter)
