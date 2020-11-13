@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CQRSSplitWise.DAL.Read;
 using CQRSSplitWise.DAL.Read.Models;
 using CQRSSplitWise.Domain.Events;
-using Newtonsoft.Json;
 
 namespace CQRSSplitWise.Services.Read
 {
