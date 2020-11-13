@@ -14,9 +14,10 @@ namespace CQRSSplitWise
 			_rabbitListener = rabbitListener;
 		}
 
-		public async Task StartAsync(CancellationToken cancellationToken)
+		public Task StartAsync(CancellationToken cancellationToken)
 		{
 			_rabbitListener.Subscribe();
+			return Task.CompletedTask;
 		}
 
 		public Task StopAsync(CancellationToken cancellationToken)
