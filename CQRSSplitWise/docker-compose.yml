@@ -31,7 +31,7 @@ services:
   rabbit:    
     container_name: rabbit
     hostname: rabbit    
-    image: rabbitmq:3-management-alpine   
+    image: rabbitmq:3.8.10-beta.1-management-alpine  
     environment:  
       RABBITMQ_ERLANG_COOKIE: 7CfDZhuS2yQat4jr          
     ports:      
