@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  cqrssplitwise:
-    image: ${DOCKER_REGISTRY-}cqrssplitwise
+  splitwise-command:
+    image: ${DOCKER_REGISTRY-}cqrssplitwise.client.command
     build:
       context: .
-      dockerfile: CQRSSplitWise/Dockerfile
+      dockerfile: CQRSSplitWise.Client.Command/Dockerfile
     ports:
       - "5000:80"
     expose:
