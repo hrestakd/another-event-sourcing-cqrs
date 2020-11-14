@@ -3,16 +3,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CQRSSplitWise.DAL.Context;
-using CQRSSplitWise.Domain.Commands;
-using CQRSSplitWise.Domain.Events;
-using CQRSSplitWise.Models.Dto;
-using CQRSSplitWise.Rabbit;
+using CQRSSplitWise.Client.Command.DAL.Context;
+using CQRSSplitWise.Client.Command.Domain.Commands;
+using CQRSSplitWise.Client.Command.Models.Dto;
+using CQRSSplitWise.Client.Command.Rabbit;
+using CQRSSplitWise.DataContracts.Events;
 using MediatR;
 
-namespace CQRSSplitWise.Domain.Handlers
+namespace CQRSSplitWise.Client.Command.Domain.Handlers
 {
-	public class InsertTransactionHandler : IRequestHandler<InsertTransactionCmd, Transaction>
+	public class InsertTransactionHandler : IRequestHandler<InsertTransactionCmd, TransactionDTO>
 	{
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ namespace CQRSSplitWise.Domain.Handlers
 			_publisher = publisher;
 		}
 
-		public async Task<Transaction> Handle(InsertTransactionCmd request, CancellationToken cancellationToken)
+		public async Task<TransactionDTO> Handle(InsertTransactionCmd request, CancellationToken cancellationToken)
 		{
 			var transaction = _mapper.Map<DAL.Models.Transaction>(request);
 			transaction.DateCreated = DateTime.UtcNow;
@@ -40,7 +40,7 @@ namespace CQRSSplitWise.Domain.Handlers
 			var eventData = MapTransactionEventData(transaction);
 			_publisher.PublishTransactionEvent(eventData);
 
-			var transactionDto = _mapper.Map<Transaction>(transaction);
+			var transactionDto = _mapper.Map<TransactionDTO>(transaction);
 
 			return transactionDto;
 		}
@@ -73,6 +73,5 @@ namespace CQRSSplitWise.Domain.Handlers
 
 			return eventData;
 		}
-
 	}
 }

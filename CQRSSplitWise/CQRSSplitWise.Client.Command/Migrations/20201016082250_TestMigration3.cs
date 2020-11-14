@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CQRSSplitWise.Migrations
+namespace CQRSSplitWise.Client.Command.Migrations
 {
     public partial class TestMigration3 : Migration
     {

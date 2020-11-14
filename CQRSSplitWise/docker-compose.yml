@@ -15,6 +15,20 @@ services:
       - sqldb
       - rabbit
 
+  splitwise-query:
+    image: ${DOCKER_REGISTRY-}cqrssplitwise.client.query
+    build:
+      context: .
+      dockerfile: CQRSSplitWise.Client.Query/Dockerfile
+    ports:
+      - "5001:80"
+    expose:
+      - 5001
+    depends_on:
+      - mongo
+      - sqldb
+      - rabbit
+
   mongo:
     image: mongo:latest
     ports:

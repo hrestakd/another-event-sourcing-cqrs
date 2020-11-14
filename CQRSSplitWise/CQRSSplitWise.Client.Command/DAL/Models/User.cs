@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-namespace CQRSSplitWise.DAL.Models
+namespace CQRSSplitWise.Client.Command.DAL.Models
 {
 	public class User
 	{

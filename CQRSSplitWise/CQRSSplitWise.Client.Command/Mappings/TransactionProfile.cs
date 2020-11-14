@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 
-namespace CQRSSplitWise.Mappings
+namespace CQRSSplitWise.Client.Command.Mappings
 {
 	public class TransactionProfile : Profile
 	{
@@ -19,7 +15,7 @@ namespace CQRSSplitWise.Mappings
 				.ForMember(x => x.DestinationWallet, x => x.Ignore())
 				.ForMember(x => x.SourceWallet, x => x.Ignore());
 			// map DAL to DTO
-			CreateMap<DAL.Models.Transaction, Models.Dto.Transaction>();
+			CreateMap<DAL.Models.Transaction, Models.Dto.TransactionDTO>();
 		}
 	}
 }

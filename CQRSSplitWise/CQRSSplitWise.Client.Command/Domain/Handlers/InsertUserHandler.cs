@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CQRSSplitWise.DAL.Context;
-using CQRSSplitWise.Domain.Commands;
-using CQRSSplitWise.Models.Dto;
+using CQRSSplitWise.Client.Command.DAL.Context;
+using CQRSSplitWise.Client.Command.DAL.Models;
+using CQRSSplitWise.Client.Command.Domain.Commands;
+using CQRSSplitWise.Client.Command.Models.Dto;
 using MediatR;
 
-namespace CQRSSplitWise.Domain.Handlers
+namespace CQRSSplitWise.Client.Command.Domain.Handlers
 {
-	public class InsertUserHandler : IRequestHandler<InsertUserCmd, User>
+	public class InsertUserHandler : IRequestHandler<InsertUserCmd, UserDTO>
 	{
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
@@ -21,14 +19,14 @@ namespace CQRSSplitWise.Domain.Handlers
 			_mapper = mapper;
 			_dbContext = context;
 		}
-		public async Task<User> Handle(InsertUserCmd request, CancellationToken cancellationToken)
+		public async Task<UserDTO> Handle(InsertUserCmd request, CancellationToken cancellationToken)
 		{
-			var user = _mapper.Map<DAL.Models.User>(request);
+			var user = _mapper.Map<User>(request);
 			_dbContext.Users.Add(user);
 
 			await _dbContext.SaveChangesAsync();
 
-			var userDto = _mapper.Map<User>(user);
+			var userDto = _mapper.Map<UserDTO>(user);
 
 			return userDto;
 		}

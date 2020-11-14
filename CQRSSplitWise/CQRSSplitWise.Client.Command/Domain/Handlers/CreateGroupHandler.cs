@@ -1,17 +1,15 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CQRSSplitWise.DAL.Context;
-using CQRSSplitWise.Domain.Commands;
-using CQRSSplitWise.Models.Dto;
 using MediatR;
-using System.Linq;
 using System.Collections.Generic;
+using CQRSSplitWise.Client.Command.DAL.Context;
+using CQRSSplitWise.Client.Command.Domain.Commands;
+using CQRSSplitWise.Client.Command.Models.Dto;
 
-namespace CQRSSplitWise.Domain.Handlers
+namespace CQRSSplitWise.Client.Command.Domain.Handlers
 {
-	public class CreateGroupHandler : IRequestHandler<CreateGroupCmd, Group>
+	public class CreateGroupHandler : IRequestHandler<CreateGroupCmd, GroupDTO>
 	{
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
@@ -24,7 +22,7 @@ namespace CQRSSplitWise.Domain.Handlers
 			_mapper = mapper;
 		}
 
-		public async Task<Group> Handle(CreateGroupCmd request, CancellationToken cancellationToken)
+		public async Task<GroupDTO> Handle(CreateGroupCmd request, CancellationToken cancellationToken)
 		{
 			var group = _mapper.Map<DAL.Models.Group>(request);
 
@@ -46,7 +44,7 @@ namespace CQRSSplitWise.Domain.Handlers
 			// https://www.talkingdotnet.com/use-hilo-to-generate-keys-with-entity-framework-core/
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
-			var groupDto = _mapper.Map<Group>(group);
+			var groupDto = _mapper.Map<GroupDTO>(group);
 
 			return groupDto;
 		}

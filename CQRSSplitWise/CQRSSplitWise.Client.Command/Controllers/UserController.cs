@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
-using CQRSSplitWise.Domain.Commands;
-using CQRSSplitWise.Models.BindingModel;
-using CQRSSplitWise.Models.Dto;
+using CQRSSplitWise.Client.Command.Domain.Commands;
+using CQRSSplitWise.Client.Command.Models.BindingModel;
+using CQRSSplitWise.Client.Command.Models.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CQRSSplitWise.Controllers
+namespace CQRSSplitWise.Client.Command.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
@@ -24,7 +21,7 @@ namespace CQRSSplitWise.Controllers
 		}
 
 		[HttpPost("[action]")]
-		public async Task<User> Create(InsertUser request)
+		public async Task<UserDTO> Create(InsertUser request)
 		{
 			var cmd = _mapper.Map<InsertUserCmd>(request);
 			var result = await _mediator.Send(cmd);

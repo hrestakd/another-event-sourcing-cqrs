@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 
-namespace CQRSSplitWise.Mappings
+namespace CQRSSplitWise.Client.Command.Mappings
 {
 	public class GroupProfile : Profile
 	{
@@ -25,7 +25,7 @@ namespace CQRSSplitWise.Mappings
 			CreateMap<Domain.Commands.AddGroupUsersCmd, IEnumerable<DAL.Models.GroupUser>>();
 
 			// map DAL to DTO
-			CreateMap<DAL.Models.Group, Models.Dto.Group>();
+			CreateMap<DAL.Models.Group, Models.Dto.GroupDTO>();
 		}
 	}
 }

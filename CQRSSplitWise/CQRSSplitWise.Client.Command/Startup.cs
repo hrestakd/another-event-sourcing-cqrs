@@ -1,11 +1,7 @@
 using AutoMapper;
-using CQRSSplitWise.Config;
-using CQRSSplitWise.DAL.Context;
-using CQRSSplitWise.DAL.Read;
-using CQRSSplitWise.DAL.Read.Models;
-using CQRSSplitWise.DAL.Read.Views;
-using CQRSSplitWise.Rabbit;
-using CQRSSplitWise.Services.Read;
+using CQRSSplitWise.Client.Command.DAL.Context;
+using CQRSSplitWise.Client.Command.Rabbit;
+using CQRSSplitWise.Extensions.Rabbit;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,9 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ObjectPool;
-using Microsoft.Extensions.Options;
 
-namespace CQRSSplitWise
+namespace CQRSSplitWise.Client.Command
 {
 	public class Startup
 	{
@@ -35,19 +30,6 @@ namespace CQRSSplitWise
 				x.UseSqlServer(Configuration["connectionStrings:SplitWiseSQLContext"]);
 			});
 
-			// Configure different collection configuration settings
-			services.Configure<TransactionHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
-
-			services.AddSingleton(x => x.GetRequiredService<IOptions<TransactionHistoryDBSettings>>().Value);
-
-			services.AddTransient<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
-			services.AddTransient<IInsertRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
-			services.AddSingleton<IQueryRepository<UserStatusView>, UserStatusViewRepository>();
-
-			services.AddScoped<UserQueryService>();
-			services.AddScoped<GroupQueryService>();
-			services.AddTransient<ProcessTransactionEventHandler>();
-
 			services.AddControllers();
 			services.AddAutoMapper(typeof(Startup));
 
@@ -64,10 +46,7 @@ namespace CQRSSplitWise
 				// initialize the rabbit channel and keep it in the object pool
 				return provider.Create(new RabbitModelObjectPoolPolicy());
 			});
-			services.AddSingleton<RabbitMQListener>();
 			services.AddSingleton<RabbitMQPublisher>();
-
-			services.AddHostedService<Initializer>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,8 +67,6 @@ namespace CQRSSplitWise
 			{
 				endpoints.MapControllers();
 			});
-
-			app.ApplicationServices.GetService<RabbitMQListener>();
 		}
 	}
 }

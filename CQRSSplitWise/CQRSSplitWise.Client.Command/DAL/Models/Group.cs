@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CQRSSplitWise.DAL.Models
+namespace CQRSSplitWise.Client.Command.DAL.Models
 {
 	public class Group
 	{

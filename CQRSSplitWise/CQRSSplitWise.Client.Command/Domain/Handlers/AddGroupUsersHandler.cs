@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CQRSSplitWise.DAL.Context;
-using CQRSSplitWise.Domain.Commands;
-using CQRSSplitWise.Models.Dto;
+using CQRSSplitWise.Client.Command.DAL.Context;
+using CQRSSplitWise.Client.Command.Domain.Commands;
+using CQRSSplitWise.Client.Command.Models.Dto;
 using MediatR;
 
-namespace CQRSSplitWise.Domain.Handlers
+namespace CQRSSplitWise.Client.Command.Domain.Handlers
 {
-	public class AddGroupUsersHandler : IRequestHandler<AddGroupUsersCmd, IEnumerable<GroupUsers>>
+	public class AddGroupUsersHandler : IRequestHandler<AddGroupUsersCmd, IEnumerable<GroupUsersDTO>>
 	{
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
@@ -24,7 +22,7 @@ namespace CQRSSplitWise.Domain.Handlers
 			_mapper = mapper;
 		}
 
-		public async Task<IEnumerable<GroupUsers>> Handle(AddGroupUsersCmd request, CancellationToken cancellationToken)
+		public async Task<IEnumerable<GroupUsersDTO>> Handle(AddGroupUsersCmd request, CancellationToken cancellationToken)
 		{
 			// todo:
 			//var groupUsers = _mapper.Map<IEnumerable<DAL.Models.GroupUser>>(request);
@@ -46,11 +44,11 @@ namespace CQRSSplitWise.Domain.Handlers
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			// temp sln:
-			var groupUsersDto = new List<GroupUsers>();
+			var groupUsersDto = new List<GroupUsersDTO>();
 
 			foreach (var groupUser in groupUsers)
 			{
-				groupUsersDto.Add(new GroupUsers
+				groupUsersDto.Add(new GroupUsersDTO
 				{
 					GroupId = groupUser.GroupId
 				});

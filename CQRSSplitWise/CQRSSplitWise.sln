@@ -7,6 +7,12 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQRSSplitWise.Client.Command", "CQRSSplitWise.Client.Command\CQRSSplitWise.Client.Command.csproj", "{CC1D8E8B-FACD-43EE-8244-23C7F40E72EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRSSplitWise.Client.Query", "CQRSSplitWise.Client.Query\CQRSSplitWise.Client.Query.csproj", "{A65C7001-A12A-4451-8044-C57ED2E9A68D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRSSplitWise.Extensions", "CQRSSplitWise.Extensions\CQRSSplitWise.Extensions.csproj", "{B2B822D8-B019-444A-9119-AD758C4C2C4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQRSSplitWise.DataContracts", "CQRSSplitWise.DataContracts\CQRSSplitWise.DataContracts.csproj", "{ED200D0F-83BE-4084-9005-74D76562C140}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{CC1D8E8B-FACD-43EE-8244-23C7F40E72EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC1D8E8B-FACD-43EE-8244-23C7F40E72EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC1D8E8B-FACD-43EE-8244-23C7F40E72EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A65C7001-A12A-4451-8044-C57ED2E9A68D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A65C7001-A12A-4451-8044-C57ED2E9A68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A65C7001-A12A-4451-8044-C57ED2E9A68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A65C7001-A12A-4451-8044-C57ED2E9A68D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2B822D8-B019-444A-9119-AD758C4C2C4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2B822D8-B019-444A-9119-AD758C4C2C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2B822D8-B019-444A-9119-AD758C4C2C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2B822D8-B019-444A-9119-AD758C4C2C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED200D0F-83BE-4084-9005-74D76562C140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED200D0F-83BE-4084-9005-74D76562C140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED200D0F-83BE-4084-9005-74D76562C140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED200D0F-83BE-4084-9005-74D76562C140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using CQRSSplitWise.Domain.Commands;
-using CQRSSplitWise.Models.BindingModel;
-using CQRSSplitWise.Models.Dto;
+using CQRSSplitWise.Client.Command.Domain.Commands;
+using CQRSSplitWise.Client.Command.Models.BindingModel;
+using CQRSSplitWise.Client.Command.Models.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CQRSSplitWise.Controllers
+namespace CQRSSplitWise.Client.Command.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
@@ -25,7 +23,7 @@ namespace CQRSSplitWise.Controllers
 		}
 
 		[HttpPost("[action]")]
-		public async Task<Group> Create(CreateGroup request)
+		public async Task<GroupDTO> Create(CreateGroup request)
 		{
 			var cmd = _mapper.Map<CreateGroupCmd>(request);
 			var result = await _mediator.Send(cmd);
@@ -34,7 +32,7 @@ namespace CQRSSplitWise.Controllers
 		}
 
 		[HttpPost("[action]")]
-		public async Task<IEnumerable<GroupUsers>> AddGroupUsers(AddGroupUsers request)
+		public async Task<IEnumerable<GroupUsersDTO>> AddGroupUsers(AddGroupUsers request)
 		{
 			var cmd = _mapper.Map<AddGroupUsersCmd>(request);
 			var result = await _mediator.Send(cmd);

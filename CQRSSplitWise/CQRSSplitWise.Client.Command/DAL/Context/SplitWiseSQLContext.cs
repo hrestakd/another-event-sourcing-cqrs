@@ -1,7 +1,7 @@
-﻿using CQRSSplitWise.DAL.Models;
+﻿using CQRSSplitWise.Client.Command.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CQRSSplitWise.DAL.Context
+namespace CQRSSplitWise.Client.Command.DAL.Context
 {
 	public class SplitWiseSQLContext : DbContext
 	{

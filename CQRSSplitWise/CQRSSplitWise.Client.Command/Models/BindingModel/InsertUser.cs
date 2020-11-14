@@ -1,4 +1,4 @@
-﻿namespace CQRSSplitWise.Models.BindingModel
+﻿namespace CQRSSplitWise.Client.Command.Models.BindingModel
 {
 	public class InsertUser
 	{

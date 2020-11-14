@@ -1,10 +1,10 @@
-﻿using CQRSSplitWise.Models.Dto;
-using CQRSSplitWise.Models.Enums;
+﻿using CQRSSplitWise.Client.Command.Models.Dto;
+using CQRSSplitWise.DataContracts.Enums;
 using MediatR;
 
-namespace CQRSSplitWise.Domain.Commands
+namespace CQRSSplitWise.Client.Command.Domain.Commands
 {
-	public class InsertTransactionCmd : IRequest<Transaction>
+	public class InsertTransactionCmd : IRequest<TransactionDTO>
 	{
 		public int UserId { get; set; }
 		public int? SourceWalletId { get; set; }

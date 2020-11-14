@@ -21,8 +21,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.11.4" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CQRSSplitWise.DataContracts\CQRSSplitWise.DataContracts.csproj" />
+    <ProjectReference Include="..\CQRSSplitWise.Extensions\CQRSSplitWise.Extensions.csproj" />
   </ItemGroup>
 
 

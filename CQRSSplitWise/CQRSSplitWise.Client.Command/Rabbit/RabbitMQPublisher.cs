@@ -1,11 +1,9 @@
-﻿using System.Text;
-using AutoMapper;
-using CQRSSplitWise.Domain.Events;
-using CQRSSplitWise.Models.Dto;
+﻿using CQRSSplitWise.DataContracts.Events;
+using CQRSSplitWise.Extensions.Rabbit;
 using Microsoft.Extensions.ObjectPool;
 using RabbitMQ.Client;
 
-namespace CQRSSplitWise.Rabbit
+namespace CQRSSplitWise.Client.Command.Rabbit
 {
 	public class RabbitMQPublisher
 	{
@@ -21,7 +19,7 @@ namespace CQRSSplitWise.Rabbit
 			_channelPool.UseTransactionChannel((channel, queueName) =>
 			{
 				var transactionEvent = new TransactionEvent(transactionEventData, null);
-				var body = Extensions.ObjectToByteArray(transactionEvent);
+				var body = Extensions.ByteArrayExtensions.ObjectToByteArray(transactionEvent);
 				channel.BasicPublish(
 					exchange: "",
 					routingKey: queueName,

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using CQRSSplitWise.DAL.Models;
-using CQRSSplitWise.Domain.Commands;
-
-namespace CQRSSplitWise.Mappings
+﻿namespace CQRSSplitWise.Client.Command.Mappings
 {
 	//public class GroupUsersConverter : ITypeConverter<AddGroupUsersCmd, IEnumerable<GroupUser>>
 	//{

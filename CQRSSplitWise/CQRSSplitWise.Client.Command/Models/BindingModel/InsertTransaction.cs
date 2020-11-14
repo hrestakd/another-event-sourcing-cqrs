@@ -1,6 +1,6 @@
-﻿using CQRSSplitWise.Models.Enums;
+﻿using CQRSSplitWise.DataContracts.Enums;
 
-namespace CQRSSplitWise.Models.BindingModel
+namespace CQRSSplitWise.Client.Command.Models.BindingModel
 {
 	public class InsertTransaction
 	{

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using CQRSSplitWise.Models.Enums;
+using CQRSSplitWise.DataContracts.Enums;
 
-namespace CQRSSplitWise.DAL.Models
+namespace CQRSSplitWise.Client.Command.DAL.Models
 {
 	public class Transaction
 	{

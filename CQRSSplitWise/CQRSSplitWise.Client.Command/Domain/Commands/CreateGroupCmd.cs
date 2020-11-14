@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CQRSSplitWise.Models.Dto;
+﻿using System.Collections.Generic;
+using CQRSSplitWise.Client.Command.Models.Dto;
 using MediatR;
 
-namespace CQRSSplitWise.Domain.Commands
+namespace CQRSSplitWise.Client.Command.Domain.Commands
 {
-	public class CreateGroupCmd : IRequest<Group>
+	public class CreateGroupCmd : IRequest<GroupDTO>
 	{
 		public string Name { get; set; }
 		public IEnumerable<int> GroupUserIds { get; set; }
