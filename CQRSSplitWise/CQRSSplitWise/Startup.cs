@@ -42,7 +42,7 @@ namespace CQRSSplitWise
 
 			services.AddTransient<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
 			services.AddTransient<IInsertRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
-			services.AddTransient<IQueryRepository<UserStatusView>, UserStatusViewRepository>();
+			services.AddSingleton<IQueryRepository<UserStatusView>, UserStatusViewRepository>();
 
 			services.AddScoped<UserQueryService>();
 			services.AddScoped<GroupQueryService>();

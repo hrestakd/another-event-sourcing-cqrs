@@ -30,11 +30,11 @@ namespace CQRSSplitWise.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public async Task<IEnumerable<UserStatusView>> GetUserState(int userID)
+		public async Task<UserStatusDTO> GetUserState(int userID)
 		{
-			var userState = await _userQueryService.GetUserState(userID);
+			var userStatus = await _userQueryService.GetUserState(userID);
 
-			return userState;
+			return userStatus;
 		}
 	}
 }

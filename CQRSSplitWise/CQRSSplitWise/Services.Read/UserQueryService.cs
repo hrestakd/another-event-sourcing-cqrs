@@ -55,14 +55,84 @@ namespace CQRSSplitWise.Services.Read
 			return data;
 		}
 
-		public async Task<IEnumerable<UserStatusView>> GetUserState(int userID)
+		public async Task<UserStatusDTO> GetUserState(int userID)
 		{
 			var expressions = new List<Expression<Func<UserStatusView, bool>>>
 			{
 				x => x.SourceUserData.UserID == userID
+					|| x.DestUserData.UserID == userID
 			};
 
-			var userStatus = await _userStatusRepository.GetData(expressions);
+			var userData = await _userStatusRepository.GetData(expressions);
+
+			if (!userData.Any())
+			{
+				return new UserStatusDTO();
+			}
+
+			// We need to produce set of information relative to target user
+			// Because it is possible that user only received the payment and never actually paid anything
+			var finalBalancePerUser = new Dictionary<int, BalanceForUser>();
+			foreach (var record in userData)
+			{
+				BalanceForUser currentBalance = null;
+				var currentID = 0;
+				if (record.SourceUserData.UserID == userID)
+				{
+					// If source user is the target user, we add amount to final balance
+					currentBalance = new BalanceForUser
+					{
+						Balance = record.UserBalance,
+						LastName = record.DestUserData.LastName,
+						Name = record.DestUserData.Name
+					};
+					currentID = record.DestUserData.UserID;
+				}
+				else
+				{
+					// Otherwise, we need to invert the amount
+					currentBalance = new BalanceForUser
+					{
+						Balance = record.UserBalance * -1,
+						LastName = record.SourceUserData.LastName,
+						Name = record.SourceUserData.Name
+					};
+					currentID = record.SourceUserData.UserID;
+				}
+
+				if (finalBalancePerUser.ContainsKey(currentID))
+				{
+					finalBalancePerUser[currentID].Balance += currentBalance.Balance;
+				}
+				else
+				{
+					finalBalancePerUser[currentID] = currentBalance;
+				}
+			}
+
+			// Get target user information
+			var targetUserInformation = userData
+				.Where(x => x.SourceUserData.UserID == userID
+					|| x.DestUserData.UserID == userID)
+				.Select(x => x.SourceUserData.UserID == userID
+					? new
+					{
+						Name = x.SourceUserData.Name,
+						LastName = x.SourceUserData.LastName
+					}
+					: new
+					{
+						Name = x.DestUserData.Name,
+						LastName = x.DestUserData.LastName
+					})
+				.FirstOrDefault();
+
+			var userStatus = new UserStatusDTO
+			{
+				Name = targetUserInformation.Name,
+				LastName = targetUserInformation.LastName,
+				Balances = finalBalancePerUser.Values
+			};
 
 			return userStatus;
 		}
