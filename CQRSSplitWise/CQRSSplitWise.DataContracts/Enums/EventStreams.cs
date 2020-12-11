@@ -2,6 +2,7 @@
 {
 	public enum EventStreams
 	{
-		Users = 1
+		Users = 1,
+		Groups = 2
 	}
 }

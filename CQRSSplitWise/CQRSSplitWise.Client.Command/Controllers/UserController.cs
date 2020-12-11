@@ -3,7 +3,6 @@ using AutoMapper;
 using CQRSSplitWise.Client.Command.Domain.Commands;
 using CQRSSplitWise.Client.Command.Models.BindingModel;
 using CQRSSplitWise.Client.Command.Models.Dto;
-using EventSourcing.API;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

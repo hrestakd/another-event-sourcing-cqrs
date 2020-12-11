@@ -13,23 +13,7 @@ namespace CQRSSplitWise.Client.Command
 		{
 			AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
-			var host = CreateHostBuilder(args).Build();
-
-			using (var scope = host.Services.CreateScope())
-			{
-				try
-				{
-					var context = scope.ServiceProvider.GetService<SplitWiseSQLContext>();
-					context.Database.EnsureDeleted();
-					context.Database.Migrate();
-				}
-				catch
-				{
-					throw;
-				}
-			}
-
-			host.Run();
+			CreateHostBuilder(args).Build().Run();
 		}
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>

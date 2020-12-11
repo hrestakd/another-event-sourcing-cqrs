@@ -24,17 +24,6 @@ namespace CQRSSplitWise.Client.Command.DAL.Context
 				.WithMany(x => x.GroupUsers)
 				.HasForeignKey(gu => gu.GroupId);
 
-			modelBuilder.Entity<User>()
-				.HasData(
-					new User { UserId = 1, FirstName = "Paško", LastName = "Patak" },
-					new User { UserId = 2, FirstName = "Crni", LastName = "Stvor" }
-				);
-			modelBuilder.Entity<Wallet>()
-				.HasData(
-					new Wallet { WalletId = 1, Name = "Credit", UserId = 1 },
-					new Wallet { WalletId = 2, Name = "Credit", UserId = 2 }
-				);
-
 			base.OnModelCreating(modelBuilder);
 		}
 		public SplitWiseSQLContext(DbContextOptions<SplitWiseSQLContext> options) : base(options)
