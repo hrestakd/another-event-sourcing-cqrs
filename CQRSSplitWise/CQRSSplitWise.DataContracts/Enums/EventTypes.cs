@@ -3,6 +3,7 @@
 	public enum EventTypes
 	{
 		UserCreated = 1,
-		GroupCreated = 2
+		GroupCreated = 2,
+		UsersAddedToGroup = 3
 	}
 }

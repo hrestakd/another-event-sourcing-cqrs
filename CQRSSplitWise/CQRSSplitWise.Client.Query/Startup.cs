@@ -53,6 +53,7 @@ namespace CQRSSplitWise.Client.Query
 			services.AddTransient<IInsertRepository<GroupData>, GroupRepository>();
 			services.AddTransient<GroupService>();
 			services.AddTransient<GroupCreatedEventHandler>();
+			services.AddTransient<AddedUsersToGroupEventHandler>();
 
 			services.AddControllers();
 

@@ -47,5 +47,24 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 
 			return model;
 		}
+
+		public async Task UpdateData(GroupData data)
+		{
+			var targetGroupUsers = await _groups
+				.AsQueryable()
+				.Where(x => x.GroupID == data.GroupID)
+				.Select(x => x.UsersInGroup
+					.Select(y => y.UserID))
+				.FirstOrDefaultAsync();
+
+			var newUsers = data.UsersInGroup
+				.Where(x => !targetGroupUsers.Contains(x.UserID));
+
+			await _groups.UpdateOneAsync(
+				x => x.GroupID == data.GroupID,
+				Builders<GroupData>.Update.PushEach(
+					y => y.UsersInGroup,
+					newUsers));
+		}
 	}
 }

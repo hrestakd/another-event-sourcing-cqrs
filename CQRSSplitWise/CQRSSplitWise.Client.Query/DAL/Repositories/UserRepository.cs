@@ -47,5 +47,10 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 
 			return model;
 		}
+
+		public Task UpdateData(UserData data)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

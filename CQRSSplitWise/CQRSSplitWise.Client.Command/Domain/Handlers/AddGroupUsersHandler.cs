@@ -5,6 +5,10 @@ using AutoMapper;
 using CQRSSplitWise.Client.Command.DAL.Context;
 using CQRSSplitWise.Client.Command.Domain.Commands;
 using CQRSSplitWise.Client.Command.Models.Dto;
+using CQRSSplitWise.DataContracts.Enums;
+using CQRSSplitWise.DataContracts.Events;
+using EventStore.Client;
+using EventStoreDB.Extensions;
 using MediatR;
 
 namespace CQRSSplitWise.Client.Command.Domain.Handlers
@@ -13,13 +17,16 @@ namespace CQRSSplitWise.Client.Command.Domain.Handlers
 	{
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
+		private readonly EventStoreClient _eventStoreClient;
 
 		public AddGroupUsersHandler(
 			SplitWiseSQLContext dbContext,
-			IMapper mapper)
+			IMapper mapper,
+			EventStoreClient eventStoreClient)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
+			_eventStoreClient = eventStoreClient;
 		}
 
 		public async Task<IEnumerable<GroupUsersDTO>> Handle(AddGroupUsersCmd request, CancellationToken cancellationToken)
@@ -42,6 +49,16 @@ namespace CQRSSplitWise.Client.Command.Domain.Handlers
 			_dbContext.GroupUsers.AddRange(groupUsers);
 
 			await _dbContext.SaveChangesAsync(cancellationToken);
+
+			var eventDefinition = new EventDefinition<UsersAddedToGroupEvent, EventMetadataBase>(
+				EventTypes.UsersAddedToGroup.ToString(),
+				new UsersAddedToGroupEvent(
+					request.GroupId,
+					request.UserIds
+				),
+				null);
+
+			await _eventStoreClient.AppendToStreamAsync(EventStreams.Groups.ToString(), eventDefinition);
 
 			// temp sln:
 			var groupUsersDto = new List<GroupUsersDTO>();

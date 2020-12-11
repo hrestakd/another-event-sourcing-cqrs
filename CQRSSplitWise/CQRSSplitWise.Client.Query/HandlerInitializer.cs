@@ -16,15 +16,18 @@ namespace CQRSSplitWise.Client.Query
 		public EventStoreClient _client { get; }
 		public UserCreatedEventHandler _userCreatedHandler;
 		public GroupCreatedEventHandler _groupCreatedHandler;
+		public AddedUsersToGroupEventHandler _addUsersToGroupHandler;
 
 		public HandlerInitializer(
 			EventStoreClient client,
 			UserCreatedEventHandler userCreatedHandler,
-			GroupCreatedEventHandler groupCreatedHandler)
+			GroupCreatedEventHandler groupCreatedHandler,
+			AddedUsersToGroupEventHandler addUsersToGroupHandler)
 		{
 			_client = client;
 			_userCreatedHandler = userCreatedHandler;
 			_groupCreatedHandler = groupCreatedHandler;
+			_addUsersToGroupHandler = addUsersToGroupHandler;
 		}
 
 		public async Task StartAsync(CancellationToken cancellationToken)
@@ -42,6 +45,15 @@ namespace CQRSSplitWise.Client.Query
 				async (eventDefinition, ctoken) =>
 				{
 					await _groupCreatedHandler.HandleGroupCreatedEvent(eventDefinition.EventData);
+
+					return;
+				},
+				null);
+
+			await _client.SubscribeToStreamAsync<UsersAddedToGroupEvent, EventMetadataBase>(EventStreams.Groups.ToString(),
+				async (eventDefinition, ctoken) =>
+				{
+					await _addUsersToGroupHandler.HandleAddedUserToGroupEvent(eventDefinition.EventData);
 
 					return;
 				},
