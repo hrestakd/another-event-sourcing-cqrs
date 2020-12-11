@@ -14,11 +14,11 @@ namespace CQRSSplitWise.Client.Query.Services
 {
 	public class UserQueryService
 	{
-		private readonly IQueryRepository<TransactionHistory> _repository;
+		private readonly IQueryRepository<Transaction> _repository;
 		private readonly IQueryRepository<UserStatusView> _userStatusRepository;
 		private readonly IMapper _mapper;
 
-		public UserQueryService(IQueryRepository<TransactionHistory> repository,
+		public UserQueryService(IQueryRepository<Transaction> repository,
 			IMapper mapper,
 			IQueryRepository<UserStatusView> userStatusRepository)
 		{
@@ -31,7 +31,7 @@ namespace CQRSSplitWise.Client.Query.Services
 		{
 			var expressions = GenerateExpressions(filter);
 
-			IEnumerable<TransactionHistory> transactionData;
+			IEnumerable<Transaction> transactionData;
 
 			if (expressions == null || expressions.Count == 0)
 			{
@@ -133,9 +133,9 @@ namespace CQRSSplitWise.Client.Query.Services
 			return userStatus;
 		}
 
-		private List<Expression<Func<TransactionHistory, bool>>> GenerateExpressions(UserHistoryFilter filter)
+		private List<Expression<Func<Transaction, bool>>> GenerateExpressions(UserHistoryFilter filter)
 		{
-			var expressions = new List<Expression<Func<TransactionHistory, bool>>>
+			var expressions = new List<Expression<Func<Transaction, bool>>>
 			{
 				x => true
 			};
@@ -178,11 +178,6 @@ namespace CQRSSplitWise.Client.Query.Services
 			if (filter.CreatedTo.HasValue)
 			{
 				expressions.Add(x => x.TransactionData.TransactionDate < filter.CreatedTo.Value);
-			}
-
-			if (filter.TransactionType > 0)
-			{
-				expressions.Add(x => x.TransactionData.TransactionType == filter.TransactionType);
 			}
 
 			return expressions;

@@ -4,6 +4,7 @@
 	{
 		UserCreated = 1,
 		GroupCreated = 2,
-		UsersAddedToGroup = 3
+		UsersAddedToGroup = 3,
+		CreateTransaction = 4
 	}
 }

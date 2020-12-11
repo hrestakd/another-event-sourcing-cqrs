@@ -14,7 +14,7 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 	{
 		private readonly IMongoCollection<UserData> _users;
 
-		public UserRepository(TransactionHistoryDBSettings config)
+		public UserRepository(MongoDBSettings config)
 		{
 			var client = new MongoClient(config.ConnectionString);
 			var db = client.GetDatabase(config.DatabaseName);

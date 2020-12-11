@@ -1,6 +1,5 @@
 using AutoMapper;
 using CQRSSplitWise.Client.Command.DAL.Context;
-using CQRSSplitWise.Client.Command.Rabbit;
 using CQRSSplitWise.Extensions.Rabbit;
 using EventStoreDB.Extensions;
 using MediatR;

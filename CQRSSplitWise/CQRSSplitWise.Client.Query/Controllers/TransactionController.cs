@@ -11,19 +11,19 @@ namespace CQRSSplitWise.Client.Query.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class GroupController : ControllerBase
+	public class TransactionController : ControllerBase
 	{
-		private readonly GroupService _groupService;
+		private readonly TransactionService _transactionService;
 
-		public GroupController(GroupService groupService)
+		public TransactionController(TransactionService transactionService)
 		{
-			_groupService = groupService;
+			_transactionService = transactionService;
 		}
 
 		[HttpGet("[action]")]
-		public async Task<IEnumerable<GroupDTO>> GetGroups()
+		public async Task<IEnumerable<TransactionDTO>> GetTransactions()
 		{
-			var results = await _groupService.GetGroups(new GroupFilter());
+			var results = await _transactionService.GetTransactions(new TransactionFilter());
 
 			return results;
 		}

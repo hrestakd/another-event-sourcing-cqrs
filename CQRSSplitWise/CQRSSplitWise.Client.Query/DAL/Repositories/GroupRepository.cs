@@ -14,7 +14,7 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 	{
 		private readonly IMongoCollection<GroupData> _groups;
 
-		public GroupRepository(TransactionHistoryDBSettings config)
+		public GroupRepository(MongoDBSettings config)
 		{
 			var client = new MongoClient(config.ConnectionString);
 			var db = client.GetDatabase(config.DatabaseName);

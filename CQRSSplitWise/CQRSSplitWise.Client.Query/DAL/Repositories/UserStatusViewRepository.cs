@@ -18,14 +18,14 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 
 		private readonly IMongoCollection<UserStatusView> _userStatusView;
 
-		public UserStatusViewRepository(TransactionHistoryDBSettings config)
+		public UserStatusViewRepository(MongoDBSettings config)
 		{
 			var client = new MongoClient(config.ConnectionString);
 			var db = client.GetDatabase(config.DatabaseName);
 
 			if (!db.ListCollectionNames().ToEnumerable().Any(x => x == _userStatusViewName))
 			{
-				var transactionCollection = db.GetCollection<TransactionHistory>(config.TransactionHistoryCollectionName);
+				var transactionCollection = db.GetCollection<Transaction>(config.TransactionsCollectionName);
 
 				var groupByPayerAggregator = transactionCollection
 					.Aggregate()
@@ -33,9 +33,7 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 					{
 						PayerData = x.SourceUserData,
 						PayeeData = x.DestUserData,
-						TransactionAmount = x.TransactionData.TransactionType == TransactionType.Refund
-							? (x.TransactionData.Amount * -1)
-							: x.TransactionData.Amount
+						TransactionAmount = x.TransactionData.Amount
 					})
 					.Group(x => new
 					{
@@ -64,9 +62,9 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 						UserBalance = x.Sum
 					});
 
-				var payerViewPipeline = PipelineDefinition<TransactionHistory, UserStatusView>.Create(groupByPayerAggregator.Stages);
+				var payerViewPipeline = PipelineDefinition<Transaction, UserStatusView>.Create(groupByPayerAggregator.Stages);
 
-				db.CreateView(_userStatusViewName, config.TransactionHistoryCollectionName, payerViewPipeline);
+				db.CreateView(_userStatusViewName, config.TransactionsCollectionName, payerViewPipeline);
 			}
 
 			_userStatusView = db.GetCollection<UserStatusView>(_userStatusViewName);

@@ -3,6 +3,7 @@
 	public enum EventStreams
 	{
 		Users = 1,
-		Groups = 2
+		Groups = 2,
+		Transactions = 3
 	}
 }

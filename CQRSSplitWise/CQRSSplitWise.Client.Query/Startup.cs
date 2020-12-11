@@ -3,7 +3,6 @@ using AutoMapper;
 using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
 using CQRSSplitWise.Client.Query.DAL.Views;
-using CQRSSplitWise.Client.Query.Rabbit;
 using CQRSSplitWise.Client.Query.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,17 +29,16 @@ namespace CQRSSplitWise.Client.Query
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.Configure<TransactionHistoryDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
+			services.Configure<MongoDBSettings>(Configuration.GetSection(nameof(NoSQLDBSettings)));
 
-			services.AddSingleton(x => x.GetRequiredService<IOptions<TransactionHistoryDBSettings>>().Value);
+			services.AddSingleton(x => x.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
-			services.AddTransient<IQueryRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
-			services.AddTransient<IInsertRepository<TransactionHistory>, TransactionHistoryQueryRepository>();
+			services.AddTransient<IQueryRepository<Transaction>, TransactionRepository>();
+			services.AddTransient<IInsertRepository<Transaction>, TransactionRepository>();
 			services.AddSingleton<IQueryRepository<UserStatusView>, UserStatusViewRepository>();
 
 			services.AddScoped<UserQueryService>();
 			services.AddScoped<GroupQueryService>();
-			services.AddTransient<ProcessTransactionEventHandler>();
 
 			// User services setup
 			services.AddTransient<IQueryRepository<DAL.Models.UserData>, UserRepository>();
@@ -55,23 +53,13 @@ namespace CQRSSplitWise.Client.Query
 			services.AddTransient<GroupCreatedEventHandler>();
 			services.AddTransient<AddedUsersToGroupEventHandler>();
 
+			// Transaction services setup
+			services.AddTransient<IQueryRepository<Transaction>, TransactionRepository>();
+			services.AddTransient<IInsertRepository<Transaction>, TransactionRepository>();
+			services.AddTransient<TransactionService>();
+			services.AddTransient<CreateTransactionEventHandler>();
+
 			services.AddControllers();
-
-			services.AddAutoMapper(typeof(Startup));
-
-			var configuration = new MapperConfiguration(cfg => cfg.AddMaps(new[] { typeof(Startup) }));
-			configuration.CompileMappings();
-			configuration.AssertConfigurationIsValid();
-
-			//services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-			//services.AddSingleton(x =>
-			//{
-			//	var provider = x.GetRequiredService<ObjectPoolProvider>();
-			//	// initialize the rabbit channel and keep it in the object pool
-			//	return provider.Create(new RabbitModelObjectPoolPolicy());
-			//});
-
-			//services.AddSingleton<RabbitMQListener>();
 
 			services.CreateEventStoreClient(new EventStoreSettings(
 				"http://eventstore:2113",
@@ -98,8 +86,6 @@ namespace CQRSSplitWise.Client.Query
 			{
 				endpoints.MapControllers();
 			});
-
-			//app.ApplicationServices.GetService<RabbitMQListener>();
 		}
 	}
 }

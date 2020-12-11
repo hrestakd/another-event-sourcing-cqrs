@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using CQRSSplitWise.Client.Command.Domain.Commands;
 using CQRSSplitWise.Client.Command.Models.BindingModel;
 using CQRSSplitWise.Client.Command.Models.Dto;
 using MediatR;
@@ -23,7 +24,14 @@ namespace CQRSSplitWise.Client.Command.Controllers
 		[HttpPost("[action]")]
 		public async Task<TransactionDTO> Insert(InsertTransaction request)
 		{
-			var cmd = _mapper.Map<Domain.Commands.InsertTransactionCmd>(request);
+			var cmd = new InsertTransactionCmd
+			{
+				Amount = request.Amount,
+				Description = request.Description,
+				SourceUserId = request.SourceUserId,
+				DestUserID = request.DestUserID
+			};
+
 			var result = await _mediator.Send(cmd);
 
 			return result;

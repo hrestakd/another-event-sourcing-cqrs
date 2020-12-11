@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Client.Query.DAL.Repositories
 {
-	public class TransactionHistoryQueryRepository : IQueryRepository<TransactionHistory>, IInsertRepository<TransactionHistory>
+	public class TransactionRepository : IQueryRepository<Transaction>, IInsertRepository<Transaction>
 	{
-		private readonly IMongoCollection<TransactionHistory> _transactionHistory;
+		private readonly IMongoCollection<Transaction> _transactionHistory;
 
-		public TransactionHistoryQueryRepository(TransactionHistoryDBSettings config)
+		public TransactionRepository(MongoDBSettings config)
 		{
 			var client = new MongoClient(config.ConnectionString);
 			var db = client.GetDatabase(config.DatabaseName);
 
-			_transactionHistory = db.GetCollection<TransactionHistory>(config.TransactionHistoryCollectionName);
+			_transactionHistory = db.GetCollection<Transaction>(config.TransactionsCollectionName);
 		}
 
-		public async Task<IEnumerable<TransactionHistory>> GetData(IEnumerable<Expression<Func<TransactionHistory, bool>>> filterExpressions)
+		public async Task<IEnumerable<Transaction>> GetData(IEnumerable<Expression<Func<Transaction, bool>>> filterExpressions)
 		{
 			var transactionsExpression = _transactionHistory.AsQueryable();
 
@@ -41,14 +41,14 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 			return history;
 		}
 
-		public async Task<TransactionHistory> InsertData(TransactionHistory model)
+		public async Task<Transaction> InsertData(Transaction model)
 		{
 			await _transactionHistory.InsertOneAsync(model);
 
 			return model;
 		}
 
-		public Task UpdateData(TransactionHistory data)
+		public Task UpdateData(Transaction data)
 		{
 			throw new NotImplementedException();
 		}

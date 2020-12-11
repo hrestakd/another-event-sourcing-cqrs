@@ -6,10 +6,8 @@ namespace CQRSSplitWise.Client.Command.Domain.Commands
 {
 	public class InsertTransactionCmd : IRequest<TransactionDTO>
 	{
-		public int UserId { get; set; }
-		public int? SourceWalletId { get; set; }
-		public int DestinationWalletId { get; set; }
-		public TransactionType TransactionType { get; set; }
+		public int SourceUserId { get; set; }
+		public int DestUserID { get; set; }
 		public string Description { get; set; }
 		public decimal Amount { get; set; }
 	}

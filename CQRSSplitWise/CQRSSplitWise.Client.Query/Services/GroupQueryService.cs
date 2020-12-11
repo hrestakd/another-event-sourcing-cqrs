@@ -13,10 +13,10 @@ namespace CQRSSplitWise.Client.Query.Services
 {
 	public class GroupQueryService
 	{
-		private readonly IQueryRepository<TransactionHistory> _repository;
+		private readonly IQueryRepository<Transaction> _repository;
 		private readonly IMapper _mapper;
 
-		public GroupQueryService(IQueryRepository<TransactionHistory> repository, IMapper mapper)
+		public GroupQueryService(IQueryRepository<Transaction> repository, IMapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;
@@ -26,7 +26,7 @@ namespace CQRSSplitWise.Client.Query.Services
 		{
 			var expressions = await GenerateExpressions(filter);
 
-			IEnumerable<TransactionHistory> transactionData;
+			IEnumerable<Transaction> transactionData;
 
 			if (expressions == null || expressions.Count() == 0)
 			{
@@ -47,9 +47,9 @@ namespace CQRSSplitWise.Client.Query.Services
 			return;
 		}
 
-		private async Task<IEnumerable<Expression<Func<TransactionHistory, bool>>>> GenerateExpressions(GroupHistoryFilter filter)
+		private async Task<IEnumerable<Expression<Func<Transaction, bool>>>> GenerateExpressions(GroupHistoryFilter filter)
 		{
-			var expressions = new List<Expression<Func<TransactionHistory, bool>>>
+			var expressions = new List<Expression<Func<Transaction, bool>>>
 			{
 				x => true
 			};
@@ -57,16 +57,6 @@ namespace CQRSSplitWise.Client.Query.Services
 			if (filter == null)
 			{
 				return expressions;
-			}
-
-			if (filter.GroupID > 0)
-			{
-				expressions.Add(x => x.GroupData.GroupID == filter.GroupID);
-			}
-
-			if (!string.IsNullOrWhiteSpace(filter.GroupName))
-			{
-				expressions.Add(x => x.GroupData.GroupName.Contains(filter.GroupName, StringComparison.InvariantCultureIgnoreCase));
 			}
 
 			if (filter.AmountFrom > 0)
@@ -87,11 +77,6 @@ namespace CQRSSplitWise.Client.Query.Services
 			if (filter.CreatedTo.HasValue)
 			{
 				expressions.Add(x => x.TransactionData.TransactionDate < filter.CreatedTo.Value);
-			}
-
-			if (filter.TransactionType > 0)
-			{
-				expressions.Add(x => x.TransactionData.TransactionType == filter.TransactionType);
 			}
 
 			return await Task.FromResult(expressions);

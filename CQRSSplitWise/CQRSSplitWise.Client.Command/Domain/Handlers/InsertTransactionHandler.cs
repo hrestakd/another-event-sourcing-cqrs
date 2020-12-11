@@ -6,8 +6,10 @@ using AutoMapper;
 using CQRSSplitWise.Client.Command.DAL.Context;
 using CQRSSplitWise.Client.Command.Domain.Commands;
 using CQRSSplitWise.Client.Command.Models.Dto;
-using CQRSSplitWise.Client.Command.Rabbit;
+using CQRSSplitWise.DataContracts.Enums;
 using CQRSSplitWise.DataContracts.Events;
+using EventStore.Client;
+using EventStoreDB.Extensions;
 using MediatR;
 
 namespace CQRSSplitWise.Client.Command.Domain.Handlers
@@ -16,64 +18,44 @@ namespace CQRSSplitWise.Client.Command.Domain.Handlers
 	{
 		private readonly SplitWiseSQLContext _dbContext;
 		private readonly IMapper _mapper;
-		//private readonly RabbitMQPublisher _publisher;
+		private readonly EventStoreClient _eventStoreClient;
 
 		public InsertTransactionHandler(
 			SplitWiseSQLContext dbContext,
-			IMapper mapper
-			//RabbitMQPublisher publisher
-			)
+			IMapper mapper,
+			EventStoreClient eventStoreClient)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
-			//_publisher = publisher;
+			_eventStoreClient = eventStoreClient;
 		}
 
 		public async Task<TransactionDTO> Handle(InsertTransactionCmd request, CancellationToken cancellationToken)
 		{
-			var transaction = _mapper.Map<DAL.Models.Transaction>(request);
-			transaction.DateCreated = DateTime.UtcNow;
+			var transactionDate = DateTime.UtcNow;
+			var eventDefinition = new EventDefinition<CreateTransactionEvent, EventMetadataBase>(
+				EventTypes.CreateTransaction.ToString(),
+				new CreateTransactionEvent(
+					request.SourceUserId,
+					request.DestUserID,
+					transactionDate,
+					request.Description,
+					request.Amount
+				),
+				null);
 
-			_dbContext.Transactions.Add(transaction);
+			await _eventStoreClient.AppendToStreamAsync(EventStreams.Transactions.ToString(), eventDefinition);
 
-			await _dbContext.SaveChangesAsync(cancellationToken);
-
-			var eventData = MapTransactionEventData(transaction);
-			//_publisher.PublishTransactionEvent(eventData);
-
-			var transactionDto = _mapper.Map<TransactionDTO>(transaction);
+			var transactionDto = new TransactionDTO
+			{
+				Amount = request.Amount,
+				Description = request.Description,
+				DestUserID = request.DestUserID,
+				SourceUserId = request.SourceUserId,
+				TransactionDate = transactionDate
+			};
 
 			return transactionDto;
-		}
-
-		private TransactionEventData MapTransactionEventData(DAL.Models.Transaction transaction)
-		{
-			// TODO: u repoe, also bolje da cachiramo usere tbh
-			//var sourceUser = _dbContext.Users
-			//	.Where(x => x.UserId == transaction.UserId)
-			//	.Select(x => new { x.FirstName, x.LastName })
-			//	.FirstOrDefault();
-
-			//var destUser = _dbContext.Wallets
-			//	.Where(x => x.WalletId == transaction.DestinationWalletId)
-			//	.Select(x => new { x.User.UserId, x.User.FirstName, x.User.LastName })
-			//	.FirstOrDefault();
-
-			//var eventData = new TransactionEventData
-			//{
-			//	SourceUserId = transaction.UserId,
-			//	SourceUserFirstName = sourceUser.FirstName,
-			//	SourceUserLastName = sourceUser.LastName,
-			//	DestUserId = destUser.UserId,
-			//	DestUserFirstName = destUser.FirstName,
-			//	DestUserLastName = destUser.LastName,
-			//	TransactionType = transaction.TransactionType,
-			//	DateCreated = transaction.DateCreated,
-			//	Description = transaction.Description,
-			//	Amount = transaction.Amount
-			//};
-
-			return new TransactionEventData();
 		}
 	}
 }

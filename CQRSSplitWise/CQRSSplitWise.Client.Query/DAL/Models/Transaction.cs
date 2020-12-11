@@ -4,12 +4,10 @@ using System;
 
 namespace CQRSSplitWise.Client.Query.DAL.Models
 {
-	public class TransactionHistory
+	public class Transaction
 	{
 		[BsonId]
 		public ObjectId ID { get; set; }
-		public Guid Guid { get; set; }
-		public GroupData GroupData { get; set; }
 		public UserData SourceUserData { get; set; }
 		public UserData DestUserData { get; set; }
 		public TransactionData TransactionData { get; set; }

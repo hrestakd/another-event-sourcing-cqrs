@@ -19,7 +19,7 @@ namespace CQRSSplitWise.Client.Query.Services
 			_repository = repository;
 		}
 
-		public async Task<IEnumerable<GroupDTO>> GetUsers(GroupFilter userFilter)
+		public async Task<IEnumerable<GroupDTO>> GetGroups(GroupFilter userFilter)
 		{
 			var expressions = GenerateExpressions(userFilter);
 
