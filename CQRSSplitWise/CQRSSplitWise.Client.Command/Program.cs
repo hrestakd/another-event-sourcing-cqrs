@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using CQRSSplitWise.Client.Command.DAL.Context;
+using System;
 
 namespace CQRSSplitWise.Client.Command
 {
@@ -10,6 +11,8 @@ namespace CQRSSplitWise.Client.Command
 	{
 		public static void Main(string[] args)
 		{
+			AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
 			var host = CreateHostBuilder(args).Build();
 
 			using (var scope = host.Services.CreateScope())

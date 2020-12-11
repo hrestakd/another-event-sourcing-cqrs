@@ -76,7 +76,7 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 		{
 			var userStatusExpression = _userStatusView.AsQueryable();
 
-			if (filterExpressions == null || filterExpressions.Count() == 0)
+			if (filterExpressions is null || !filterExpressions.Any())
 			{
 				return await Task.FromResult(userStatusExpression.AsEnumerable());
 			}

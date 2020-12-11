@@ -3,6 +3,7 @@ using AutoMapper;
 using CQRSSplitWise.Client.Command.Domain.Commands;
 using CQRSSplitWise.Client.Command.Models.BindingModel;
 using CQRSSplitWise.Client.Command.Models.Dto;
+using EventSourcing.API;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,7 @@ namespace CQRSSplitWise.Client.Command.Controllers
     {
 		private readonly IMapper _mapper;
 		private readonly IMediator _mediator;
+
 		public UserController(IMapper mapper, IMediator mediator) 
 		{
 			_mapper = mapper;
@@ -26,7 +28,7 @@ namespace CQRSSplitWise.Client.Command.Controllers
 			var cmd = _mapper.Map<InsertUserCmd>(request);
 			var result = await _mediator.Send(cmd);
 
-			return result;
+			return null;
 		}
 
     }

@@ -2,6 +2,8 @@ using AutoMapper;
 using CQRSSplitWise.Client.Command.DAL.Context;
 using CQRSSplitWise.Client.Command.Rabbit;
 using CQRSSplitWise.Extensions.Rabbit;
+using EventSourcing.API;
+using EventStoreDB.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,14 +41,22 @@ namespace CQRSSplitWise.Client.Command
 
 			services.AddMediatR(typeof(Startup));
 
-			services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-			services.AddSingleton(x =>
-			{
-				var provider = x.GetRequiredService<ObjectPoolProvider>();
-				// initialize the rabbit channel and keep it in the object pool
-				return provider.Create(new RabbitModelObjectPoolPolicy());
-			});
-			services.AddSingleton<RabbitMQPublisher>();
+			//services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+			//services.AddSingleton(x =>
+			//{
+			//	var provider = x.GetRequiredService<ObjectPoolProvider>();
+			//	// initialize the rabbit channel and keep it in the object pool
+			//	return provider.Create(new RabbitModelObjectPoolPolicy());
+			//});
+			//services.AddSingleton<RabbitMQPublisher>();
+
+			services.CreateEventStoreClient(new EventStoreSettings(
+				"http://eventstore:2113",
+				"admin",
+				"changeit",
+				true));
+
+			services.AddSingleton<EventStoreRepo>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

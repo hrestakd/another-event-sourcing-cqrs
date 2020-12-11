@@ -8,6 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["CQRSSplitWise.Client.Command/CQRSSplitWise.Client.Command.csproj", "CQRSSplitWise.Client.Command/"]
+RUN dotnet nuget add source https://nuget.pkg.github.com/mario-cale/index.json -n github -u mario-cale -p 9dbcd3716b6e24c75c423cdc47aa28a32b55ebd9 --store-password-in-clear-text
 RUN dotnet restore "CQRSSplitWise.Client.Command/CQRSSplitWise.Client.Command.csproj"
 COPY . .
 WORKDIR "/src/CQRSSplitWise.Client.Command"

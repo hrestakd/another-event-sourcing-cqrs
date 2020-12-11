@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.ObjectPool;
 using CQRSSplitWise.Extensions.Rabbit;
+using EventStoreDB.Extensions;
+using CQRSSplitWise.Client.Query.EventHandlers;
 
 namespace CQRSSplitWise.Client.Query
 {
@@ -40,6 +42,12 @@ namespace CQRSSplitWise.Client.Query
 			services.AddScoped<GroupQueryService>();
 			services.AddTransient<ProcessTransactionEventHandler>();
 
+			// User services setup
+			services.AddTransient<IQueryRepository<DAL.Models.UserData>, UserRepository>();
+			services.AddTransient<IInsertRepository<DAL.Models.UserData>, UserRepository>();
+			services.AddTransient<UserService>();
+			services.AddTransient<UserCreatedEventHandler>();
+
 			services.AddControllers();
 
 			services.AddAutoMapper(typeof(Startup));
@@ -48,17 +56,23 @@ namespace CQRSSplitWise.Client.Query
 			configuration.CompileMappings();
 			configuration.AssertConfigurationIsValid();
 
-			services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-			services.AddSingleton(x =>
-			{
-				var provider = x.GetRequiredService<ObjectPoolProvider>();
-				// initialize the rabbit channel and keep it in the object pool
-				return provider.Create(new RabbitModelObjectPoolPolicy());
-			});
+			//services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+			//services.AddSingleton(x =>
+			//{
+			//	var provider = x.GetRequiredService<ObjectPoolProvider>();
+			//	// initialize the rabbit channel and keep it in the object pool
+			//	return provider.Create(new RabbitModelObjectPoolPolicy());
+			//});
 
-			services.AddSingleton<RabbitMQListener>();
+			//services.AddSingleton<RabbitMQListener>();
 
-			services.AddHostedService<Initializer>();
+			services.CreateEventStoreClient(new EventStoreSettings(
+				"http://eventstore:2113",
+				"admin",
+				"changeit",
+				true));
+
+			services.AddHostedService<HandlerInitializer>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,7 +92,7 @@ namespace CQRSSplitWise.Client.Query
 				endpoints.MapControllers();
 			});
 
-			app.ApplicationServices.GetService<RabbitMQListener>();
+			//app.ApplicationServices.GetService<RabbitMQListener>();
 		}
 	}
 }
