@@ -11,6 +11,7 @@ namespace CQRSSplitWise.Client.Query.Filters
 		public DateTime? CreatedTo { get; set; }
 		public decimal? AmountFrom { get; set; }
 		public decimal? AmountTo { get; set; }
+		public int AllForUserID { get; set; }
 		public int PaidByUserID { get; set; }
 		public int PaidToUserID { get; set; }
 	}

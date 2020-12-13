@@ -1,11 +1,16 @@
 ﻿using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
 using CQRSSplitWise.Client.Query.DTO;
+using CQRSSplitWise.Client.Query.EventHandlers;
 using CQRSSplitWise.Client.Query.Filters;
+using CQRSSplitWise.DataContracts.Enums;
+using CQRSSplitWise.DataContracts.Events;
+using EventStore.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Client.Query.Services
@@ -13,10 +18,17 @@ namespace CQRSSplitWise.Client.Query.Services
 	public class TransactionService
 	{
 		private readonly IQueryRepository<Transaction> _transactionRepository;
+		private readonly EventStoreClient _eventStoreClient;
+		private readonly CreateTransactionEventHandler _createTransactionHandler;
 
-		public TransactionService(IQueryRepository<Transaction> repository)
+		public TransactionService(
+			IQueryRepository<Transaction> repository,
+			EventStoreClient eventStoreClient,
+			CreateTransactionEventHandler createTransactionEventHandler)
 		{
 			_transactionRepository = repository;
+			_eventStoreClient = eventStoreClient;
+			_createTransactionHandler = createTransactionEventHandler;
 		}
 
 		public async Task<IEnumerable<TransactionDTO>> GetTransactions(TransactionFilter filter)
@@ -60,6 +72,22 @@ namespace CQRSSplitWise.Client.Query.Services
 			return data;
 		}
 
+		public async Task RebuildTransactions()
+		{
+			var fullStream = _eventStoreClient
+				.ReadStreamAsync(
+					Direction.Forwards,
+					EventStreams.Transactions.ToString(),
+					StreamPosition.Start);
+
+			await fullStream.ForEachAsync(
+				async x =>
+				{
+					var @event = JsonSerializer.Deserialize<CreateTransactionEvent>(x.Event.Data.ToArray());
+					await _createTransactionHandler.HandleCreateTransactionEvent(@event);
+				});
+		}
+
 		private List<Expression<Func<Transaction, bool>>> GenerateExpressions(TransactionFilter filter)
 		{
 			var expressions = new List<Expression<Func<Transaction, bool>>>
@@ -70,6 +98,12 @@ namespace CQRSSplitWise.Client.Query.Services
 			if (filter == null)
 			{
 				return expressions;
+			}
+
+			if (filter.AllForUserID > 0)
+			{
+				expressions.Add(x => x.SourceUserData.UserID == filter.AllForUserID
+					|| x.DestUserData.UserID == filter.AllForUserID);
 			}
 
 			if (filter.PaidByUserID > 0)

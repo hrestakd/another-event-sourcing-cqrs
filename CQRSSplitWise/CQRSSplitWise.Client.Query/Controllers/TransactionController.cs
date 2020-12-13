@@ -21,11 +21,26 @@ namespace CQRSSplitWise.Client.Query.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public async Task<IEnumerable<TransactionDTO>> GetTransactions()
+		public async Task<IEnumerable<TransactionDTO>> GetTransactions(int allForUserID, int paidByID, int paidToID)
 		{
-			var results = await _transactionService.GetTransactions(new TransactionFilter());
+			var filter = new TransactionFilter
+			{
+				AllForUserID = allForUserID,
+				PaidByUserID = paidByID,
+				PaidToUserID = paidToID
+			};
+
+			var results = await _transactionService.GetTransactions(filter);
 
 			return results;
+		}
+
+		[HttpGet("[action]")]
+		public async Task RebuildTransactions()
+		{
+			await _transactionService.RebuildTransactions();
+
+			return;
 		}
 	}
 }

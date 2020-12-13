@@ -17,19 +17,22 @@ namespace CQRSSplitWise.Client.Query
 		private readonly GroupCreatedEventHandler _groupCreatedHandler;
 		private readonly AddedUsersToGroupEventHandler _addUsersToGroupHandler;
 		private readonly CreateTransactionEventHandler _createTransactionHandler;
+		private readonly UpdateBalanceEventHandler _updateBalanceEventHandler;
 
 		public HandlerInitializer(
 			EventStoreClient client,
 			UserCreatedEventHandler userCreatedHandler,
 			GroupCreatedEventHandler groupCreatedHandler,
 			AddedUsersToGroupEventHandler addUsersToGroupHandler,
-			CreateTransactionEventHandler createTransactionHandler)
+			CreateTransactionEventHandler createTransactionHandler,
+			UpdateBalanceEventHandler updateBalanceEventHandler)
 		{
 			_eventStoreClient = client;
 			_userCreatedHandler = userCreatedHandler;
 			_groupCreatedHandler = groupCreatedHandler;
 			_addUsersToGroupHandler = addUsersToGroupHandler;
 			_createTransactionHandler = createTransactionHandler;
+			_updateBalanceEventHandler = updateBalanceEventHandler;
 		}
 
 		public async Task StartAsync(CancellationToken cancellationToken)
@@ -65,6 +68,8 @@ namespace CQRSSplitWise.Client.Query
 				async (eventDefinition, ctoken) =>
 				{
 					await _createTransactionHandler.HandleCreateTransactionEvent(eventDefinition.EventData);
+
+					await _updateBalanceEventHandler.HandleBalanceUpdate(eventDefinition.EventData);
 
 					return;
 				},

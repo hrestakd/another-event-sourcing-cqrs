@@ -48,6 +48,13 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 			return model;
 		}
 
+		public async Task<IEnumerable<GroupData>> InsertData(IEnumerable<GroupData> data)
+		{
+			await _groups.InsertManyAsync(data);
+
+			return data;
+		}
+
 		public async Task UpdateData(GroupData data)
 		{
 			var targetGroupUsers = await _groups

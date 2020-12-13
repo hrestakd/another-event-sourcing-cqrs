@@ -2,10 +2,10 @@
 
 namespace CQRSSplitWise.Client.Query.DTO
 {
-	public class UserStatusDTO
+	public class UserBalanceDTO
 	{
-		public string Name { get; set; }
-		public string LastName { get; set; }
+		public UserDTO UserData { get; set; }
+		public decimal TotalBalance { get; set; }
 		public IEnumerable<BalanceForUser> Balances { get; set; }
 	}
 }

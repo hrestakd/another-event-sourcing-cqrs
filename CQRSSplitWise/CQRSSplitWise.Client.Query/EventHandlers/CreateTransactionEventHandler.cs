@@ -13,13 +13,19 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 	{
 		private readonly IInsertRepository<Transaction> _transactionRepository;
 		private readonly IQueryRepository<UserData> _userRepository;
+		private readonly IInsertRepository<UserBalance> _userBalanceInsertRepository;
+		private readonly IQueryRepository<UserBalance> _userBalanceQueryRepository;
 
 		public CreateTransactionEventHandler(
 			IInsertRepository<Transaction> transactionRepository,
-			IQueryRepository<UserData> userRepository)
+			IQueryRepository<UserData> userRepository,
+			IInsertRepository<UserBalance> userBalanceRepository,
+			IQueryRepository<UserBalance> userBalanceQueryRepository)
 		{
 			_transactionRepository = transactionRepository;
 			_userRepository = userRepository;
+			_userBalanceInsertRepository = userBalanceRepository;
+			_userBalanceQueryRepository = userBalanceQueryRepository;
 		}
 
 		public async Task HandleCreateTransactionEvent(CreateTransactionEvent createTransaction)
@@ -49,6 +55,13 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 			var destUser = users
 				.FirstOrDefault(x => x.UserID == createTransaction.DestUserID);
 
+			await HandleTransactionEntry(sourceUser, destUser, createTransaction);
+
+			return;
+		}
+
+		private async Task HandleTransactionEntry(UserData sourceUser, UserData destUser, CreateTransactionEvent createTransaction)
+		{
 			await _transactionRepository
 				.InsertData(new Transaction
 				{
@@ -61,8 +74,6 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 						TransactionDate = createTransaction.TransactionDate
 					}
 				});
-
-			return;
 		}
 	}
 }

@@ -2,7 +2,6 @@ using CQRSSplitWise.Client.Query.Config;
 using AutoMapper;
 using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
-using CQRSSplitWise.Client.Query.DAL.Views;
 using CQRSSplitWise.Client.Query.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,9 +34,8 @@ namespace CQRSSplitWise.Client.Query
 
 			services.AddTransient<IQueryRepository<Transaction>, TransactionRepository>();
 			services.AddTransient<IInsertRepository<Transaction>, TransactionRepository>();
-			services.AddSingleton<IQueryRepository<UserStatusView>, UserStatusViewRepository>();
 
-			services.AddScoped<UserQueryService>();
+			services.AddScoped<UserBalanceService>();
 			services.AddScoped<GroupQueryService>();
 
 			// User services setup
@@ -58,6 +56,12 @@ namespace CQRSSplitWise.Client.Query
 			services.AddTransient<IInsertRepository<Transaction>, TransactionRepository>();
 			services.AddTransient<TransactionService>();
 			services.AddTransient<CreateTransactionEventHandler>();
+
+			// User balances
+			services.AddTransient<IQueryRepository<UserBalance>, UserBalanceRepository>();
+			services.AddTransient<IInsertRepository<UserBalance>, UserBalanceRepository>();
+			services.AddTransient<UserBalanceService>();
+			services.AddTransient<UpdateBalanceEventHandler>();
 
 			services.AddControllers();
 

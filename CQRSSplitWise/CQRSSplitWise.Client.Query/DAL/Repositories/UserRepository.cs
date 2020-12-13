@@ -48,6 +48,13 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 			return model;
 		}
 
+		public async Task<IEnumerable<UserData>> InsertData(IEnumerable<UserData> data)
+		{
+			await _users.InsertManyAsync(data);
+
+			return data;
+		}
+
 		public Task UpdateData(UserData data)
 		{
 			throw new NotImplementedException();
