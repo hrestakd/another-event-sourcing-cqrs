@@ -32,13 +32,8 @@ namespace CQRSSplitWise.Client.Query
 
 			services.AddSingleton(x => x.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
-			services.AddTransient<IRepository<Transaction>, TransactionRepository>();
-
-			services.AddScoped<UserBalanceService>();
-			services.AddScoped<GroupQueryService>();
-
 			// User services setup
-			services.AddTransient<IRepository<DAL.Models.UserData>, UserRepository>();
+			services.AddTransient<IRepository<UserData>, UserRepository>();
 			services.AddTransient<UserService>();
 			services.AddTransient<UserCreatedEventHandler>();
 
