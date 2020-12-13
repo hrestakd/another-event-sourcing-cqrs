@@ -17,6 +17,8 @@ using CQRSSplitWise.Client.Query.Groups.Services;
 using CQRSSplitWise.Client.Query.Groups.EventHandlers;
 using CQRSSplitWise.Client.Query.Users.Services;
 using CQRSSplitWise.Client.Query.Users.EventHandlers;
+using CQRSSplitWise.Client.Query.Transactions.Services;
+using CQRSSplitWise.Client.Query.Transactions.EventHandlers;
 
 namespace CQRSSplitWise.Client.Query
 {

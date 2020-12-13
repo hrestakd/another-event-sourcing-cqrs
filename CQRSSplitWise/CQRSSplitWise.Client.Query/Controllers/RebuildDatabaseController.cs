@@ -1,5 +1,6 @@
 ﻿using CQRSSplitWise.Client.Query.Groups.Services;
 using CQRSSplitWise.Client.Query.Services;
+using CQRSSplitWise.Client.Query.Transactions.Services;
 using CQRSSplitWise.Client.Query.Users.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

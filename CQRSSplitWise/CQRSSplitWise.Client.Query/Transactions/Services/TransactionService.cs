@@ -1,8 +1,8 @@
 ﻿using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
-using CQRSSplitWise.Client.Query.DTO;
-using CQRSSplitWise.Client.Query.EventHandlers;
-using CQRSSplitWise.Client.Query.Filters;
+using CQRSSplitWise.Client.Query.Transactions.DTO;
+using CQRSSplitWise.Client.Query.Transactions.EventHandlers;
+using CQRSSplitWise.Client.Query.Transactions.Filters;
 using CQRSSplitWise.DataContracts.Enums;
 using CQRSSplitWise.DataContracts.Events;
 using EventStore.Client;
@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.Services
+namespace CQRSSplitWise.Client.Query.Transactions.Services
 {
 	public class TransactionService
 	{

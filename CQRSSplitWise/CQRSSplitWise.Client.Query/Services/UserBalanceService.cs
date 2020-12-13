@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using CQRSSplitWise.Client.Query.DAL.Models;
+﻿using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
 using CQRSSplitWise.Client.Query.DTO;
 using CQRSSplitWise.Client.Query.EventHandlers;
-using CQRSSplitWise.Client.Query.Filters;
 using CQRSSplitWise.DataContracts.Enums;
 using CQRSSplitWise.DataContracts.Events;
 using EventStore.Client;

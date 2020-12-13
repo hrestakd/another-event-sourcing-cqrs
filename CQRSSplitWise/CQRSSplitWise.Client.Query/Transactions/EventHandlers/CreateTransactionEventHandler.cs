@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.EventHandlers
+namespace CQRSSplitWise.Client.Query.Transactions.EventHandlers
 {
 	public class CreateTransactionEventHandler
 	{

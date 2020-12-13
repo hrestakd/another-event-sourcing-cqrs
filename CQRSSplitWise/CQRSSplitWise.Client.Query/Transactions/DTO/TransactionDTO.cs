@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CQRSSplitWise.Client.Query.DTO
+namespace CQRSSplitWise.Client.Query.Transactions.DTO
 {
 	public class TransactionDTO
 	{

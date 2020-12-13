@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CQRSSplitWise.Client.Query.DTO;
-using CQRSSplitWise.Client.Query.Filters;
 using CQRSSplitWise.Client.Query.Services;
 using Microsoft.AspNetCore.Mvc;
 
