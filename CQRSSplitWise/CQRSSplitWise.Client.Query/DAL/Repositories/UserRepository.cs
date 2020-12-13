@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Client.Query.DAL.Repositories
 {
-	public class UserRepository: IQueryRepository<UserData>, IInsertRepository<UserData>
+	public class UserRepository: IRepository<UserData>
 	{
 		private readonly IMongoCollection<UserData> _users;
 
@@ -20,6 +20,11 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 			var db = client.GetDatabase(config.DatabaseName);
 
 			_users = db.GetCollection<UserData>(config.UsersCollectionName);
+		}
+
+		public async Task DropCollection()
+		{
+			await _users.DeleteManyAsync(x => true);
 		}
 
 		public async Task<IEnumerable<UserData>> GetData(IEnumerable<Expression<Func<UserData, bool>>> filterExpressions)

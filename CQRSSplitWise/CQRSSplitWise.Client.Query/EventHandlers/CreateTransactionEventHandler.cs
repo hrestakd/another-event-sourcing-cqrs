@@ -11,21 +11,15 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 {
 	public class CreateTransactionEventHandler
 	{
-		private readonly IInsertRepository<Transaction> _transactionRepository;
-		private readonly IQueryRepository<UserData> _userRepository;
-		private readonly IInsertRepository<UserBalance> _userBalanceInsertRepository;
-		private readonly IQueryRepository<UserBalance> _userBalanceQueryRepository;
+		private readonly IRepository<Transaction> _transactionRepository;
+		private readonly IRepository<UserData> _userRepository;
 
 		public CreateTransactionEventHandler(
-			IInsertRepository<Transaction> transactionRepository,
-			IQueryRepository<UserData> userRepository,
-			IInsertRepository<UserBalance> userBalanceRepository,
-			IQueryRepository<UserBalance> userBalanceQueryRepository)
+			IRepository<Transaction> transactionRepository,
+			IRepository<UserData> userRepository)
 		{
 			_transactionRepository = transactionRepository;
 			_userRepository = userRepository;
-			_userBalanceInsertRepository = userBalanceRepository;
-			_userBalanceQueryRepository = userBalanceQueryRepository;
 		}
 
 		public async Task HandleCreateTransactionEvent(CreateTransactionEvent createTransaction)

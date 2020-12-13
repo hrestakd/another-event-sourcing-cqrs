@@ -11,7 +11,7 @@ using CQRSSplitWise.DataContracts.Enums;
 
 namespace CQRSSplitWise.Client.Query.DAL.Repositories
 {
-	public class UserBalanceRepository : IQueryRepository<UserBalance>, IInsertRepository<UserBalance>
+	public class UserBalanceRepository : IRepository<UserBalance>
 	{
 		private readonly IMongoCollection<UserBalance> _usersBalance;
 
@@ -21,6 +21,11 @@ namespace CQRSSplitWise.Client.Query.DAL.Repositories
 			var db = client.GetDatabase(config.DatabaseName);
 
 			_usersBalance = db.GetCollection<UserBalance>(config.UsersBalanceCollectionName);
+		}
+
+		public async Task DropCollection()
+		{
+			await _usersBalance.DeleteManyAsync(x => true);
 		}
 
 		public async Task<IEnumerable<UserBalance>> GetData(IEnumerable<Expression<Func<UserBalance, bool>>> filterExpressions)

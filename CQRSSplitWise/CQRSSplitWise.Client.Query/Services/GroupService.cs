@@ -1,22 +1,37 @@
 ﻿using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
 using CQRSSplitWise.Client.Query.DTO;
+using CQRSSplitWise.Client.Query.EventHandlers;
 using CQRSSplitWise.Client.Query.Filters;
+using CQRSSplitWise.DataContracts.Enums;
+using CQRSSplitWise.DataContracts.Events;
+using EventStore.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Client.Query.Services
 {
 	public class GroupService
 	{
-		private readonly IQueryRepository<GroupData> _repository;
+		private readonly IRepository<GroupData> _repository;
+		private readonly EventStoreClient _eventStoreClient;
+		private readonly GroupCreatedEventHandler _groupCreatedHandler;
+		private readonly AddedUsersToGroupEventHandler _addUsersToGroupHandler;
 
-		public GroupService(IQueryRepository<GroupData> repository)
+		public GroupService(
+			IRepository<GroupData> repository,
+			EventStoreClient eventStoreClient,
+			GroupCreatedEventHandler groupCreatedEventHandler,
+			AddedUsersToGroupEventHandler addedUsersToGroupEventHandler)
 		{
 			_repository = repository;
+			_eventStoreClient = eventStoreClient;
+			_groupCreatedHandler = groupCreatedEventHandler;
+			_addUsersToGroupHandler = addedUsersToGroupEventHandler;
 		}
 
 		public async Task<IEnumerable<GroupDTO>> GetGroups(GroupFilter userFilter)
@@ -52,6 +67,34 @@ namespace CQRSSplitWise.Client.Query.Services
 			}
 
 			return data;
+		}
+
+		public async Task RebuildGroups()
+		{
+			await _repository.DropCollection();
+
+			var fullStream = _eventStoreClient
+				.ReadStreamAsync(
+					Direction.Forwards,
+					EventStreams.Groups.ToString(),
+					StreamPosition.Start);
+
+			var events = await fullStream.ToListAsync();
+
+			foreach (var @event in events)
+			{
+				var eventType = @event.OriginalEvent.EventType;
+				if (eventType == EventTypes.GroupCreated.ToString())
+				{
+					var groupCreated = JsonSerializer.Deserialize<GroupCreatedEvent>(@event.OriginalEvent.Data.ToArray());
+					await _groupCreatedHandler.HandleGroupCreatedEvent(groupCreated);
+				}
+				else if (eventType == EventTypes.UsersAddedToGroup.ToString())
+				{
+					var usersAdded = JsonSerializer.Deserialize<UsersAddedToGroupEvent>(@event.OriginalEvent.Data.ToArray());
+					await _addUsersToGroupHandler.HandleAddedUserToGroupEvent(usersAdded);
+				}
+			}
 		}
 
 		private List<Expression<Func<GroupData, bool>>> GenerateExpressions(GroupFilter filter)

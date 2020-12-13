@@ -13,10 +13,10 @@ namespace CQRSSplitWise.Client.Query.Services
 {
 	public class GroupQueryService
 	{
-		private readonly IQueryRepository<Transaction> _repository;
+		private readonly IRepository<Transaction> _repository;
 		private readonly IMapper _mapper;
 
-		public GroupQueryService(IQueryRepository<Transaction> repository, IMapper mapper)
+		public GroupQueryService(IRepository<Transaction> repository, IMapper mapper)
 		{
 			_repository = repository;
 			_mapper = mapper;

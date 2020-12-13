@@ -18,12 +18,12 @@ namespace CQRSSplitWise.Client.Query.Services
 {
 	public class UserBalanceService
 	{
-		private readonly IQueryRepository<UserBalance> _userBalanceRepository;
+		private readonly IRepository<UserBalance> _userBalanceRepository;
 		private readonly EventStoreClient _eventStoreClient;
 		private readonly UpdateBalanceEventHandler _balanceEventHandler;
 
 		public UserBalanceService(
-			IQueryRepository<UserBalance> userBalanceRepository,
+			IRepository<UserBalance> userBalanceRepository,
 			EventStoreClient eventStoreClient,
 			UpdateBalanceEventHandler updateBalanceEventHandler)
 		{
@@ -78,6 +78,8 @@ namespace CQRSSplitWise.Client.Query.Services
 
 		public async Task RebuildBalance()
 		{
+			await _userBalanceRepository.DropCollection();
+
 			var fullStream = _eventStoreClient
 				.ReadStreamAsync(
 					Direction.Forwards,

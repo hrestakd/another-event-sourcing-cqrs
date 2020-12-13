@@ -11,21 +11,18 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 {
 	public class UpdateBalanceEventHandler
 	{
-		private readonly IInsertRepository<Transaction> _transactionRepository;
-		private readonly IQueryRepository<UserData> _userRepository;
-		private readonly IInsertRepository<UserBalance> _userBalanceInsertRepository;
-		private readonly IQueryRepository<UserBalance> _userBalanceQueryRepository;
+		private readonly IRepository<Transaction> _transactionRepository;
+		private readonly IRepository<UserData> _userRepository;
+		private readonly IRepository<UserBalance> _userBalanceRepository;
 
 		public UpdateBalanceEventHandler(
-			IInsertRepository<Transaction> transactionRepository,
-			IQueryRepository<UserData> userRepository,
-			IInsertRepository<UserBalance> userBalanceRepository,
-			IQueryRepository<UserBalance> userBalanceQueryRepository)
+			IRepository<Transaction> transactionRepository,
+			IRepository<UserData> userRepository,
+			IRepository<UserBalance> userBalanceQueryRepository)
 		{
 			_transactionRepository = transactionRepository;
 			_userRepository = userRepository;
-			_userBalanceInsertRepository = userBalanceRepository;
-			_userBalanceQueryRepository = userBalanceQueryRepository;
+			_userBalanceRepository = userBalanceQueryRepository;
 		}
 
 		public async Task HandleBalanceUpdate(CreateTransactionEvent createTransaction)
@@ -68,7 +65,7 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 				createTransaction.DestUserID == x.SourceUserData.UserID
 					&& createTransaction.SourceUserID == x.DestUserData.UserID);
 
-			var userBalancesForUpdate = await _userBalanceQueryRepository
+			var userBalancesForUpdate = await _userBalanceRepository
 				.GetData(balanceExpressions);
 
 			var balancesForInsert = new List<UserBalance>();
@@ -89,7 +86,7 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 					TotalBalance = currentBalance + createTransaction.Amount
 				};
 
-				await _userBalanceInsertRepository.UpdateData(updateBalance);
+				await _userBalanceRepository.UpdateData(updateBalance);
 			}
 			else
 			{
@@ -119,7 +116,7 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 					TotalBalance = currentBalance - createTransaction.Amount
 				};
 
-				await _userBalanceInsertRepository.UpdateData(updateBalance);
+				await _userBalanceRepository.UpdateData(updateBalance);
 			}
 			else
 			{
@@ -135,7 +132,7 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 
 			if (balancesForInsert.Any())
 			{
-				await _userBalanceInsertRepository.InsertData(balancesForInsert);
+				await _userBalanceRepository.InsertData(balancesForInsert);
 			}
 		}
 	}

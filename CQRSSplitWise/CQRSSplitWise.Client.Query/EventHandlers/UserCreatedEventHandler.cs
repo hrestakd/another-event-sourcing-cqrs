@@ -10,9 +10,9 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 {
 	public class UserCreatedEventHandler
 	{
-		private readonly IInsertRepository<UserData> _repository;
+		private readonly IRepository<UserData> _repository;
 
-		public UserCreatedEventHandler(IInsertRepository<UserData> repository)
+		public UserCreatedEventHandler(IRepository<UserData> repository)
 		{
 			_repository = repository;
 		}

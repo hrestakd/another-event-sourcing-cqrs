@@ -32,34 +32,29 @@ namespace CQRSSplitWise.Client.Query
 
 			services.AddSingleton(x => x.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
-			services.AddTransient<IQueryRepository<Transaction>, TransactionRepository>();
-			services.AddTransient<IInsertRepository<Transaction>, TransactionRepository>();
+			services.AddTransient<IRepository<Transaction>, TransactionRepository>();
 
 			services.AddScoped<UserBalanceService>();
 			services.AddScoped<GroupQueryService>();
 
 			// User services setup
-			services.AddTransient<IQueryRepository<DAL.Models.UserData>, UserRepository>();
-			services.AddTransient<IInsertRepository<DAL.Models.UserData>, UserRepository>();
+			services.AddTransient<IRepository<DAL.Models.UserData>, UserRepository>();
 			services.AddTransient<UserService>();
 			services.AddTransient<UserCreatedEventHandler>();
 
 			// Group services setup
-			services.AddTransient<IQueryRepository<GroupData>, GroupRepository>();
-			services.AddTransient<IInsertRepository<GroupData>, GroupRepository>();
+			services.AddTransient<IRepository<GroupData>, GroupRepository>();
 			services.AddTransient<GroupService>();
 			services.AddTransient<GroupCreatedEventHandler>();
 			services.AddTransient<AddedUsersToGroupEventHandler>();
 
 			// Transaction services setup
-			services.AddTransient<IQueryRepository<Transaction>, TransactionRepository>();
-			services.AddTransient<IInsertRepository<Transaction>, TransactionRepository>();
+			services.AddTransient<IRepository<Transaction>, TransactionRepository>();
 			services.AddTransient<TransactionService>();
 			services.AddTransient<CreateTransactionEventHandler>();
 
 			// User balances
-			services.AddTransient<IQueryRepository<UserBalance>, UserBalanceRepository>();
-			services.AddTransient<IInsertRepository<UserBalance>, UserBalanceRepository>();
+			services.AddTransient<IRepository<UserBalance>, UserBalanceRepository>();
 			services.AddTransient<UserBalanceService>();
 			services.AddTransient<UpdateBalanceEventHandler>();
 

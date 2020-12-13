@@ -1,23 +1,34 @@
 ﻿using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
 using CQRSSplitWise.Client.Query.DTO;
+using CQRSSplitWise.Client.Query.EventHandlers;
 using CQRSSplitWise.Client.Query.Filters;
+using CQRSSplitWise.DataContracts.Enums;
 using CQRSSplitWise.DataContracts.Events;
+using EventStore.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Client.Query.Services
 {
 	public class UserService
 	{
-		private readonly IQueryRepository<UserData> _repository;
+		private readonly IRepository<UserData> _repository;
+		private readonly EventStoreClient _eventStoreClient;
+		private readonly UserCreatedEventHandler _userCreatedHandler;
 
-		public UserService(IQueryRepository<UserData> repository)
+		public UserService(
+			IRepository<UserData> repository,
+			EventStoreClient eventStoreClient,
+			UserCreatedEventHandler userCreatedEventHandler)
 		{
 			_repository = repository;
+			_eventStoreClient = eventStoreClient;
+			_userCreatedHandler = userCreatedEventHandler;
 		}
 
 		public async Task<IEnumerable<UserDTO>> GetUsers(UserFilter userFilter)
@@ -47,6 +58,25 @@ namespace CQRSSplitWise.Client.Query.Services
 			}
 
 			return data;
+		}
+
+		public async Task RebuildUsers()
+		{
+			await _repository.DropCollection();
+
+			var fullStream = _eventStoreClient
+				.ReadStreamAsync(
+					Direction.Forwards,
+					EventStreams.Users.ToString(),
+					StreamPosition.Start);
+
+			var events = await fullStream.ToListAsync();
+
+			foreach (var @event in events)
+			{
+				var userCreated = JsonSerializer.Deserialize<UserCreatedEvent>(@event.OriginalEvent.Data.ToArray());
+				await _userCreatedHandler.HandleUserCreatedEvent(userCreated);
+			}
 		}
 
 		private List<Expression<Func<UserData, bool>>> GenerateExpressions(UserFilter filter)

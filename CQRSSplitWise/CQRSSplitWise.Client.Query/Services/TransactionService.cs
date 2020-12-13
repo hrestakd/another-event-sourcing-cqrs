@@ -17,12 +17,12 @@ namespace CQRSSplitWise.Client.Query.Services
 {
 	public class TransactionService
 	{
-		private readonly IQueryRepository<Transaction> _transactionRepository;
+		private readonly IRepository<Transaction> _transactionRepository;
 		private readonly EventStoreClient _eventStoreClient;
 		private readonly CreateTransactionEventHandler _createTransactionHandler;
 
 		public TransactionService(
-			IQueryRepository<Transaction> repository,
+			IRepository<Transaction> repository,
 			EventStoreClient eventStoreClient,
 			CreateTransactionEventHandler createTransactionEventHandler)
 		{
@@ -74,6 +74,8 @@ namespace CQRSSplitWise.Client.Query.Services
 
 		public async Task RebuildTransactions()
 		{
+			await _transactionRepository.DropCollection();
+
 			var fullStream = _eventStoreClient
 				.ReadStreamAsync(
 					Direction.Forwards,

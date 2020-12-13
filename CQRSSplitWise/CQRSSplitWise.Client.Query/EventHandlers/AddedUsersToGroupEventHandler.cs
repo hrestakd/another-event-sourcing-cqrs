@@ -11,12 +11,12 @@ namespace CQRSSplitWise.Client.Query.EventHandlers
 {
 	public class AddedUsersToGroupEventHandler
 	{
-		private readonly IInsertRepository<GroupData> _groupRepository;
-		private readonly IQueryRepository<UserData> _userRepository;
+		private readonly IRepository<GroupData> _groupRepository;
+		private readonly IRepository<UserData> _userRepository;
 
 		public AddedUsersToGroupEventHandler(
-			IInsertRepository<GroupData> groupRepository,
-			IQueryRepository<UserData> userRepository)
+			IRepository<GroupData> groupRepository,
+			IRepository<UserData> userRepository)
 		{
 			_groupRepository = groupRepository;
 			_userRepository = userRepository;
