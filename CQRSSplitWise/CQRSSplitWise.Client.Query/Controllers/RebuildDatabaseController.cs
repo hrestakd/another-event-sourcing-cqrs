@@ -1,8 +1,7 @@
-﻿using CQRSSplitWise.Client.Query.Services;
+﻿using CQRSSplitWise.Client.Query.Groups.Services;
+using CQRSSplitWise.Client.Query.Services;
+using CQRSSplitWise.Client.Query.Users.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CQRSSplitWise.Client.Query.Controllers

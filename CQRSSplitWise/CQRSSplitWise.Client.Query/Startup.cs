@@ -13,6 +13,10 @@ using Microsoft.Extensions.ObjectPool;
 using CQRSSplitWise.Extensions.Rabbit;
 using EventStoreDB.Extensions;
 using CQRSSplitWise.Client.Query.EventHandlers;
+using CQRSSplitWise.Client.Query.Groups.Services;
+using CQRSSplitWise.Client.Query.Groups.EventHandlers;
+using CQRSSplitWise.Client.Query.Users.Services;
+using CQRSSplitWise.Client.Query.Users.EventHandlers;
 
 namespace CQRSSplitWise.Client.Query
 {

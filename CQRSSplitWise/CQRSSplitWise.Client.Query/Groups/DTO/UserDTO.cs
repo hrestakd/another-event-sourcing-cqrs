@@ -1,6 +1,6 @@
-﻿namespace CQRSSplitWise.Client.Query.Filters
+﻿namespace CQRSSplitWise.Client.Query.Groups.DTO
 {
-	public class UserFilter
+	public class UserDTO
 	{
 		public int UserID { get; set; }
 		public string FirstName { get; set; }

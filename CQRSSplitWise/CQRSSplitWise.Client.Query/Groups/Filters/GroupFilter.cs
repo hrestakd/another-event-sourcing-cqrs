@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.Filters
+namespace CQRSSplitWise.Client.Query.Groups.Filters
 {
 	public class GroupFilter
 	{

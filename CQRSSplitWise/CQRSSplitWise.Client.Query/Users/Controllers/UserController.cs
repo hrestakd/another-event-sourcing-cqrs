@@ -1,13 +1,11 @@
-﻿using CQRSSplitWise.Client.Query.DTO;
-using CQRSSplitWise.Client.Query.Filters;
-using CQRSSplitWise.Client.Query.Services;
+﻿using CQRSSplitWise.Client.Query.Users.DTO;
+using CQRSSplitWise.Client.Query.Users.Filters;
+using CQRSSplitWise.Client.Query.Users.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.Controllers
+namespace CQRSSplitWise.Client.Query.Users.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]

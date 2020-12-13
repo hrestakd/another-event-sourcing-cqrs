@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace CQRSSplitWise.Client.Query.DTO
+namespace CQRSSplitWise.Client.Query.Groups.DTO
 {
 	public class GroupDTO
 	{

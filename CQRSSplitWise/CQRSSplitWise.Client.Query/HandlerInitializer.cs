@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CQRSSplitWise.Client.Query.EventHandlers;
+using CQRSSplitWise.Client.Query.Groups.EventHandlers;
+using CQRSSplitWise.Client.Query.Users.EventHandlers;
 using CQRSSplitWise.DataContracts.Enums;
 using CQRSSplitWise.DataContracts.Events;
 using EventStore.Client;

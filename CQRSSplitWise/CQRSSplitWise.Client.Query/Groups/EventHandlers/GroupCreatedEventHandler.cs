@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.EventHandlers
+namespace CQRSSplitWise.Client.Query.Groups.EventHandlers
 {
 	public class GroupCreatedEventHandler
 	{

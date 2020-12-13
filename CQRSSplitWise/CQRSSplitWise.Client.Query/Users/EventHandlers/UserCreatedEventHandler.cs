@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.EventHandlers
+namespace CQRSSplitWise.Client.Query.Users.EventHandlers
 {
 	public class UserCreatedEventHandler
 	{
