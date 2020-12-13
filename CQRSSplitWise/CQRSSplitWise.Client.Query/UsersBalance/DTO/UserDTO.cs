@@ -1,4 +1,4 @@
-﻿namespace CQRSSplitWise.Client.Query.DTO
+﻿namespace CQRSSplitWise.Client.Query.UsersBalance.DTO
 {
 	public class UserDTO
 	{

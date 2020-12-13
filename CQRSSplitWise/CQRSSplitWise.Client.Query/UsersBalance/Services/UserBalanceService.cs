@@ -1,7 +1,7 @@
 ﻿using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
-using CQRSSplitWise.Client.Query.DTO;
-using CQRSSplitWise.Client.Query.EventHandlers;
+using CQRSSplitWise.Client.Query.UsersBalance.DTO;
+using CQRSSplitWise.Client.Query.UsersBalance.EventHandlers;
 using CQRSSplitWise.DataContracts.Enums;
 using CQRSSplitWise.DataContracts.Events;
 using EventStore.Client;
@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.Services
+namespace CQRSSplitWise.Client.Query.UsersBalance.Services
 {
 	public class UserBalanceService
 	{

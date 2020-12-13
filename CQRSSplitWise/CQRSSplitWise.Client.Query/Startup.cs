@@ -1,24 +1,21 @@
 using CQRSSplitWise.Client.Query.Config;
-using AutoMapper;
 using CQRSSplitWise.Client.Query.DAL.Models;
 using CQRSSplitWise.Client.Query.DAL.Repositories;
-using CQRSSplitWise.Client.Query.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.ObjectPool;
-using CQRSSplitWise.Extensions.Rabbit;
 using EventStoreDB.Extensions;
-using CQRSSplitWise.Client.Query.EventHandlers;
 using CQRSSplitWise.Client.Query.Groups.Services;
 using CQRSSplitWise.Client.Query.Groups.EventHandlers;
 using CQRSSplitWise.Client.Query.Users.Services;
 using CQRSSplitWise.Client.Query.Users.EventHandlers;
 using CQRSSplitWise.Client.Query.Transactions.Services;
 using CQRSSplitWise.Client.Query.Transactions.EventHandlers;
+using CQRSSplitWise.Client.Query.UsersBalance.Services;
+using CQRSSplitWise.Client.Query.UsersBalance.EventHandlers;
 
 namespace CQRSSplitWise.Client.Query
 {

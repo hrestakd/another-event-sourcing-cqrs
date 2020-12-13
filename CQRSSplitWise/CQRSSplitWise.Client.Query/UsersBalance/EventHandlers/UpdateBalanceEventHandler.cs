@@ -7,20 +7,17 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CQRSSplitWise.Client.Query.EventHandlers
+namespace CQRSSplitWise.Client.Query.UsersBalance.EventHandlers
 {
 	public class UpdateBalanceEventHandler
 	{
-		private readonly IRepository<Transaction> _transactionRepository;
 		private readonly IRepository<UserData> _userRepository;
 		private readonly IRepository<UserBalance> _userBalanceRepository;
 
 		public UpdateBalanceEventHandler(
-			IRepository<Transaction> transactionRepository,
 			IRepository<UserData> userRepository,
 			IRepository<UserBalance> userBalanceQueryRepository)
 		{
-			_transactionRepository = transactionRepository;
 			_userRepository = userRepository;
 			_userBalanceRepository = userBalanceQueryRepository;
 		}

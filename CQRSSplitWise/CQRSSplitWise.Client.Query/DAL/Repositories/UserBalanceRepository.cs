@@ -7,7 +7,6 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using CQRSSplitWise.Client.Query.Config;
 using CQRSSplitWise.Client.Query.DAL.Models;
-using CQRSSplitWise.DataContracts.Enums;
 
 namespace CQRSSplitWise.Client.Query.DAL.Repositories
 {

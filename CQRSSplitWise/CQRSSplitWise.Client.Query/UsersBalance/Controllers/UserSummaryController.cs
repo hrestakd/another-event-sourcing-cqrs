@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using CQRSSplitWise.Client.Query.DTO;
-using CQRSSplitWise.Client.Query.Services;
+using CQRSSplitWise.Client.Query.UsersBalance.DTO;
+using CQRSSplitWise.Client.Query.UsersBalance.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CQRSSplitWise.Client.Query.Controllers
+namespace CQRSSplitWise.Client.Query.UsersBalance.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
