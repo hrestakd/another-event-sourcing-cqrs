@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  cqrssplitwise:
-    image: ${DOCKER_REGISTRY-}cqrssplitwise
+  splitwise-command:
+    image: ${DOCKER_REGISTRY-}cqrssplitwise.client.command
     build:
       context: .
-      dockerfile: CQRSSplitWise/Dockerfile
+      dockerfile: CQRSSplitWise.Client.Command/Dockerfile
     ports:
       - "5000:80"
     expose:
@@ -13,7 +13,21 @@ services:
     depends_on:
       - mongo
       - sqldb
-      - rabbit
+      - eventstore
+
+  splitwise-query:
+    image: ${DOCKER_REGISTRY-}cqrssplitwise.client.query
+    build:
+      context: .
+      dockerfile: CQRSSplitWise.Client.Query/Dockerfile
+    ports:
+      - "5001:80"
+    expose:
+      - 5001
+    depends_on:
+      - mongo
+      - sqldb
+      - eventstore
 
   mongo:
     image: mongo:latest
@@ -28,14 +42,12 @@ services:
       SA_PASSWORD: "Password123!"
       ACCEPT_EULA: "Y"
 
-  rabbit:    
-    container_name: rabbit
-    hostname: rabbit    
-    image: rabbitmq:3-management-alpine   
-    environment:  
-      RABBITMQ_ERLANG_COOKIE: 7CfDZhuS2yQat4jr          
-    ports:      
-      - "4369:4369"
-      - "5672:5672"
-      - "25672:25672"
-      - "15672:15672"
+  eventstore:
+    image: eventstore/eventstore:20.6.1-buster-slim
+    environment:
+      - EVENTSTORE_INSECURE=true
+      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+      - EVENTSTORE_DEV=True
+    ports:
+      - 2113:2113
+      - 1113:1113
